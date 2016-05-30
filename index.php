@@ -1,4 +1,5 @@
 <?php
+  ini_set('display_errors', 1);
   $host = "us-cdbr-azure-west-c.cloudapp.net";
   $user = "b411bdc8084ca4";
   $pwd = "fdd4ffbb";
