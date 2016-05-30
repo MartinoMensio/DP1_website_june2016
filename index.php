@@ -5,7 +5,7 @@
   $pwd = "fdd4ffbb";
   $db = "dp-web-jun16-martinomensio";
   // Connect to database.
-  $conn = new mysqli_connect( $host, $user, $pwd, $db);
+  $conn = mysqli_connect( $host, $user, $pwd, $db);
   if(!conn) {
     die("impossible to connect to database");
   }
