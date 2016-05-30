@@ -1,8 +1,14 @@
 <?php
+// show warnings and errors
 ini_set('display_errors', 1);
 
-$useLocalDb = false;
+// force HTTPS
+if(empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] != 'on') {
+	header('Location: https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'], TRUE, 301);
+}
 
+// check which db to use
+$useLocalDb = false;
 if ($useLocalDb) {
 	$host = "localhost";
 	$user = "root";
