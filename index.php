@@ -6,13 +6,13 @@
   $db = "dp-web-jun16-martinomensio";
   // Connect to database.
   $conn = mysqli_connect( $host, $user, $pwd, $db);
-  if(!conn) {
+  if(!$conn) {
     die("impossible to connect to database");
   }
   echo 'successfully connected to db';
   $conn->autocommit(false);
   $query = $conn->query("SELECT * FROM users");
-  if(!query) {
+  if(!$query) {
     $conn->close();
     die("query failed");
   }
