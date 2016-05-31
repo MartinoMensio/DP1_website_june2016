@@ -14,41 +14,16 @@ require 'functions.php';
     $pieces = explode(":", $start_time);
     $starting_minute = $pieces[1];
     $starting_hour = $pieces[0];
-    // TODO check values of three parameters
-    // TODO check overlapping reservations (SELECT locking)
-    // TODO machine choose
-    $machine = 1;
-    
-    $stmt = $conn->prepare("INSERT INTO reservations(duration, starting_hour, starting_minute, machine, user_id) VALUES(?, ?, ?, ?, ?)");
-    if(!$stmt) {
-      echo $conn->error;
-      header('Location: '.'new_reservation.php?error');
-      die();
-    }
-    $stmt->bind_param("iiiii", $duration, $starting_hour, $starting_minute, $machine, $_SESSION["user_id"]);
-    if(!$stmt->execute()) {
-      header('Location: '.'new_reservation.php?error');
-      die();
-    }
+    $reservation = insertNewReservation($conn, $duration, $starting_minute, $starting_hour);
   } else if($_REQUEST["type"] === "remove") {
     //echo 'you want to remove id ='.$_REQUEST["id"];
-    $stmt = $conn->prepare("DELETE FROM reservations WHERE id = ?");
-    if(!$stmt) {
-      echo $conn->error;
-      header('Location: '.'list_user_reservations.php?error');
-      die();
-    }
-    $stmt->bind_param("i", $_REQUEST["id"]);
-    if(!$stmt->execute()) {
-      header('Location: '.'list_user_reservations.php?error');
-      die();
-    }
+    $id = $_REQUEST["id"];
+    removeReservation($conn, $id);
   } else {
     header('Location: '.'new_reservation.php?error');
     die();
-  }
+  }  
   
-  $conn->commit();
 ?>
 <!DOCTYPE html>
 <html>
@@ -71,7 +46,7 @@ require 'functions.php';
 <div class="w3-animate-right" style="margin-left:25%">
 <?php
   if($_REQUEST["type"] === "add") {
-    echo "added reservation with start time: $start_time duration: $duration machine: $machine";
+    echo "added reservation with start time: $start_time duration: $reservation->duration machine: $reservation->machine";
   } else if($_REQUEST["type"] === "remove") {
     echo "deleted reservation";
   }

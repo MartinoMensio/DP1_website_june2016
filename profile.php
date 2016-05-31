@@ -28,13 +28,13 @@
   ?> 
 </div>
 <div class="w3-animate-right" style="margin-left:25%">
-... page content ...
-<!-- iframe sucks, need a partial for sidenav and a partial for content -->
+  <table>
 <?php
-  echo 'name: '.$_SESSION['name'].'<br />';
-  echo 'surname: '.$_SESSION['surname'].'<br />';
-  echo 'email: '.$_SESSION['email'].'<br />';
+  echo '<tr><td>name:</td><td>'.$_SESSION['name'].'</td><tr>';
+  echo '<tr><td>surname:</td><td>'.$_SESSION['surname'].'</td><tr>';
+  echo '<tr><td>email:</td><td>'.$_SESSION['email'].'</td><tr>';
 ?>
+</table>
 </div>
 </body>
 </html>
