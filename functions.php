@@ -107,19 +107,20 @@ function goToDestination($destination) {
 function login($conn, $email, $password) {
 	$stmt = $conn->prepare("SELECT name, surname, id FROM users WHERE email = ? AND password = ?");
 	if(!$stmt) {
-		goToWithError('login.html','prepare');
+		goToWithError('login.php','prepare');
 	}
 	if(!$stmt->bind_param("ss", $email, $password)) {
-		goToWithError('login.html','bind_param');
+		goToWithError('login.php','bind_param');
 	}
 	if(!$stmt->execute()) {
-		goToWithError('login.html','execute');
+		goToWithError('login.php','execute');
 	}
 	if(!$stmt->bind_result($name, $surname, $id)) {
-		goToWithError('login.html','bind_result');
+		goToWithError('login.php','bind_result');
 	}
 	if(!$stmt->fetch()) {
-		goToWithError('login.html','fetch');
+		// gets there when the selects founds 0 rows
+		goToWithError('login.php','account not found. Please check your data');
 	}
 	/* // don't need to commit for a select statement
 	if(!$conn->commit()) {
@@ -138,18 +139,18 @@ function login($conn, $email, $password) {
 function signup($conn, $name, $surname, $email, $password) {
 	$stmt = $conn->prepare("INSERT INTO users(name, surname, email, password) VALUES(?, ?, ?, ?)");
 	if(!$stmt) {
-		goToWithError('login.html', 'prepare');
+		goToWithError('login.php', 'prepare');
 	}
 	if(!$stmt->bind_param("ssss", $name, $surname, $email, $password)) {
-		goToWithError('login.html', 'bind_param');
+		goToWithError('login.php', 'bind_param');
 	}
 	if(!$stmt->execute()) {
-		goToWithError('login.html', 'execute');
+		goToWithError('login.php', 'impossible to create the account. Maybe the email was already used');
 	}
 	// the id of the last inserted value
 	$id = $conn->insert_id;
 	if(!$conn->commit()) {
-		goToWithError('login.html', 'commit');
+		goToWithError('login.php', 'commit');
 	}
   $_SESSION['timeout'] = time();
   $_SESSION['name'] = $name;
