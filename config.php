@@ -7,6 +7,9 @@ if(empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] != 'on') {
 	header('Location: https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'], TRUE, 301);
 }
 
+$maxInactiveTime = 60 * 2;
+$loginPage = "login.html";
+
 // check which db to use
 $useLocalDb = false;
 if ($useLocalDb) {
