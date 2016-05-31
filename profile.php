@@ -27,7 +27,7 @@
     sidenavPrint();
   ?> 
 </div>
-<div class="w3-animate-right" style="margin-left:25%">
+<div class="w3-animate-right w3-padding-medium" style="margin-left:25%">
   <table>
 <?php
   echo '<tr><td>name:</td><td>'.$_SESSION['name'].'</td><tr>';

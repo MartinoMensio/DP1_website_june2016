@@ -26,7 +26,7 @@
     sidenavPrint();
   ?> 
 </div>
-<div class="w3-animate-right" style="margin-left:25%" id="content">
+<div class="w3-animate-right w3-padding-medium" style="margin-left:25%" id="content">
 <?php
   listUserReservations($conn);
 ?>

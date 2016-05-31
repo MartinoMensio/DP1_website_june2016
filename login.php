@@ -14,7 +14,7 @@
 <?php
   if(isset($_REQUEST["error"])) {
     $error = $_REQUEST["error"];
-    echo '<div id="error"><h1>';
+    echo '<div id="error" class="w3-padding-medium"><h1>';
     echo 'Error: '.$error;
     echo '</h1>';
     echo '<button type="button" onclick="hideError()">OK</button>';
@@ -25,8 +25,8 @@
     echo '<div id="login_form" class="visible">';
   }
 ?>
-<a href="index.php">no login, go to homepage</a>
-<div class="w3-sidenav w3-animate-left" style="width:50%">
+<a href="index.php" class="w3-padding-medium">no login, go to homepage</a>
+<div class="w3-sidenav w3-animate-left w3-padding-medium" style="width:50%">
 <h1>Login</h1>
 <form action="login_validate.php" method="post">
   <input type="text" value="login" hidden="hidden" name="type" />
@@ -38,7 +38,7 @@
   
 </form>
 </div>
-<div class=" w3-animate-right" style="margin-left:50%">
+<div class=" w3-animate-right w3-padding-medium" style="margin-left:50%">
   <h1>Register</h1>
   <form action="login_validate.php" method="post">
     <input type="text" value="register" hidden="hidden" name="type" />
