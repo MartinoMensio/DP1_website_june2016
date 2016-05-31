@@ -25,7 +25,10 @@
     }
     //echo mysqli_num_rows($result);
     $stmt->bind_result($name, $surname);
-    $stmt->fetch();
+    if(!$stmt->fetch()) {
+      header('Location: '.'login.html');
+      die();
+    }
     //var_dump($name);
     //var_dump($surname);
   } else {
