@@ -15,7 +15,7 @@ function checkAuthentication($redirect) {
 			header('Location: ' . $loginPage);
 			die();
 		}
-		var_dump($_SESSION);
+		//var_dump($_SESSION);
 	} else {
 		// valid session
 		$authenticated = true;
@@ -54,13 +54,13 @@ function sidenavPrint() {
 	global $authenticated, $loginPage;
 	// look if user is logged in (checked by a init function)
 	if($authenticated) {
-		echo '<h1>Hello user</h1>';
+		echo '<h1>Hello '.$_SESSION["name"].'</h1>';
 		echo '<a href="profile.php">profile</a>';
 		echo '<a href="#">add reservation</a>';
 		echo '<a href="#">list my reservations</a>';
-		echo "<a href=\"$loginPage\">logout</a>";
+		echo '<a href="logout.php">logout</a>';
 	} else {
-		echo '<a href="login.html">login</a>';
+		echo "<a href=\"$loginPage\">login</a>";
 	}
 }
 function getRequiredPostArgument($conn, $name) {
