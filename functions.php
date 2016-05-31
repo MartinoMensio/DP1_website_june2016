@@ -44,20 +44,36 @@ function listAllReservations($conn) {
 		die("no data is stored");
 	}
 	echo '<table>';
-	echo '<tr><th>Starting time</th><th>Duration</th><th>Selected machine</th><th>User</th></tr>';
+	echo '<tr><th>Starting time</th><th>Duration</th><th>Selected machine</th></tr>';
 	while($row = $query->fetch_object()) {
-		echo "<tr><td>".$row->starting_hour.":".$row->starting_minute."</td><td>".$row->duration."</td><td>".$row->machine."</td><td>".$row->user_id."</td></tr>";
+		echo "<tr><td>".$row->starting_hour.":".$row->starting_minute."</td><td>".$row->duration."</td><td>".$row->machine."</td></tr>";
+	}
+	echo '</table>';
+}
+function listUserReservations($conn) {
+	$query = $conn->query("SELECT * FROM reservations WHERE user_id =".$_SESSION["user_id"]." ORDER BY starting_hour, starting_minute");
+	if(!$query) {
+		die("impossible to list the reservations");
+	}
+	if($conn->affected_rows == 0) {
+		die("no data is stored");
+	}
+	echo '<table>';
+	echo '<tr><th>Starting time</th><th>Duration</th><th>Selected machine</th></tr>';
+	while($row = $query->fetch_object()) {
+		echo "<tr><td>".$row->starting_hour.":".$row->starting_minute."</td><td>".$row->duration."</td><td>".$row->machine.'</td><td><button type="button" onclick="remove_reservation('.$row->id.')">Remove</button></td></tr>';
 	}
 	echo '</table>';
 }
 function sidenavPrint() {
 	global $authenticated, $loginPage;
+	echo '<a href="index.php">Homepage (all reservations)</a>';
 	// look if user is logged in (checked by a init function)
 	if($authenticated) {
 		echo '<h1>Hello '.$_SESSION["name"].'</h1>';
 		echo '<a href="profile.php">profile</a>';
-		echo '<a href="#">add reservation</a>';
-		echo '<a href="#">list my reservations</a>';
+		echo '<a href="new_reservation.php">add reservation</a>';
+		echo '<a href="list_user_reservations.php">list my reservations</a>';
 		echo '<a href="logout.php">logout</a>';
 	} else {
 		echo "<a href=\"$loginPage\">login</a>";
