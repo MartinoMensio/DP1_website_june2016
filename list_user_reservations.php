@@ -28,12 +28,30 @@
 </div>
 <div class="w3-animate-right w3-padding-medium" style="margin-left:25%" id="content">
 <?php
+  if(isset($_REQUEST["error"])) {
+    $error = $_REQUEST["error"];
+    echo '<div id="error" class="w3-padding-medium"><h1>';
+    echo 'Error: '.htmlentities($error);
+    echo '</h1>';
+    echo '<button type="button" onclick="hideError()">OK</button>';
+    echo '</div>';
+    echo '<div id="list_reservations" class="hidden">';
+  } else {
+    $error = false;
+    echo '<div id="list_reservations" class="visible">';
+  }
+?>
+<?php
   listUserReservations($conn);
 ?>
 </div>
 <script type="text/javascript">
 function remove_reservation(id) {
   location = "reservation_submit.php?type=remove&id="+id;
+}
+function hideError() {
+  document.getElementById('error').className = 'hidden';
+  document.getElementById('list_reservations').className = 'visible';
 }
 </script>
 </body>
