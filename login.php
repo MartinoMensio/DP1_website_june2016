@@ -15,7 +15,7 @@
   if(isset($_REQUEST["error"])) {
     $error = $_REQUEST["error"];
     echo '<div id="error" class="w3-padding-medium"><h1>';
-    echo 'Error: '.$error;
+    echo 'Error: '.htmlentities($error);
     echo '</h1>';
     echo '<button type="button" onclick="hideError()">OK</button>';
     echo '</div>';
