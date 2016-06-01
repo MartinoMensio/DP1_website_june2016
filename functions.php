@@ -45,9 +45,9 @@ function listAllReservations($conn) {
 		die("no data is stored");
 	}
 	echo '<table>';
-	echo '<tr><th>Starting time</th><th>Duration</th><th>Selected machine</th></tr>';
+	echo '<tr><th>Starting time</th><th>Ending time</th><th>Selected machine</th></tr>';
 	while($row = $query->fetch_object()) {
-		echo "<tr><td>".$row->starting_hour.":".$row->starting_minute."</td><td>".$row->duration."</td><td>".$row->machine."</td></tr>";
+		echo "<tr><td>".$row->starting_hour.":".$row->starting_minute."</td><td>".$row->ending_hour.":".$row->ending_minute."</td><td>".$row->machine."</td></tr>";
 	}
 	echo '</table>';
 }
@@ -61,9 +61,9 @@ function listUserReservations($conn) {
 		die("no data is stored");
 	}
 	echo '<table>';
-	echo '<tr><th>Starting time</th><th>Duration</th><th>Selected machine</th></tr>';
+	echo '<tr><th>Starting time</th><th>Ending time</th><th>Selected machine</th></tr>';
 	while($row = $query->fetch_object()) {
-		echo "<tr><td>".$row->starting_hour.":".$row->starting_minute."</td><td>".$row->duration."</td><td>".$row->machine.'</td><td><button type="button" onclick="remove_reservation('.$row->id.')">Remove</button></td></tr>';
+		echo "<tr><td>".$row->starting_hour.":".$row->starting_minute."</td><td>".$row->ending_hour.":".$row->ending_minute."</td><td>".$row->machine.'</td><td><button type="button" onclick="remove_reservation('.$row->id.')">Remove</button></td></tr>';
 	}
 	echo '</table>';
 }
@@ -163,31 +163,114 @@ function signup($conn, $name, $surname, $email, $password) {
 }
 
 function insertNewReservation($conn, $duration, $starting_minute, $starting_hour) {
+	global $numberOfMachines;
 	// TODO check values of three parameters
 	// TODO check overlapping reservations (SELECT locking)
 	// TODO machine choose
 	$reservation = new stdClass();
-	$machine = 1;
 	
-	$stmt = $conn->prepare("INSERT INTO reservations(duration, starting_hour, starting_minute, machine, user_id) VALUES(?, ?, ?, ?, ?)");
-	if(!$stmt) {
-		goToWithError('new_reservation.php','prepare');
+	$ending_minute = ($starting_minute + $duration) % 60;
+	$ending_hour = floor(($starting_minute + $duration) / 60) + $starting_hour;
+	
+	$starting_time = $starting_minute+60*$starting_hour;
+	$ending_time = $ending_minute+60*$ending_hour;
+	
+	//echo "$ending_hour:$ending_minute";
+	
+	// also if not released explicitly, on rollback (caused by die) the tables are unlocked
+	/*
+	LOCK TABLES reservations WRITE;
+	
+	SELECT machine FROM reservations
+	WHERE starting_hour < sh
+	AND starting_minute < sm
+	AND ending_hour > eh
+	AND ending_minute > em;
+
+	for each of them, remove from the available ones
+	and see if some is still available
+	
+	INSERT INTO reservations ...;
+	
+	UNLOCK TABLES;
+	*/
+	$machines = [];
+	for($i = 0; $i < $numberOfMachines; $i++) {
+		$machines[$i] = true;
 	}
-	if(!$stmt->bind_param("iiiii", $duration, $starting_hour, $starting_minute, $machine, $_SESSION["user_id"])) {
-		goToWithError('new_reservation.php','bind_param');
+	if(!$conn->query("LOCK TABLES reservations WRITE")) {
+		goToWithError('new_reservation.php','lock aquire failed');
+	}
+	$stmt = $conn->prepare("SELECT machine FROM reservations WHERE starting_hour*60+starting_minute < ? AND ending_hour*60+ending_minute > ?");
+	if(!$stmt) {
+		$conn->query("UNLOCK TABLES");
+		goToWithError('new_reservation.php','prepare select');
+	}
+	if(!$stmt->bind_param("ii", $ending_time, $starting_time)) {
+		$conn->query("UNLOCK TABLES");
+		goToWithError('new_reservation.php','bind_param select');
 	}
 	if(!$stmt->execute()) {
-		goToWithError('new_reservation.php','bind_param');
+		$conn->query("UNLOCK TABLES");
+		goToWithError('new_reservation.php','execute select');
+	}
+	if(!$stmt->bind_result($machine)) {
+		$conn->query("UNLOCK TABLES");
+		goToWithError('new_reservation.php', 'bind_result select');
+	}
+	//var_dump($machines);
+	while ($stmt->fetch()) {
+		//echo "found used machine:$machine";
+		$machines[$machine] = false;
+	}
+	
+	$machine = -1;
+	
+	for ($i=0; $i < $numberOfMachines; $i++) { 
+		if ($machines[$i]) {
+			$machine = $i;
+			break;
+		}
+	}
+	//var_dump($machines);
+	
+	//echo "selected machine: $machine";
+	//die();
+	
+	if($machine == -1) {
+		// no machine is free
+		$conn->query("UNLOCK TABLES");
+		goToWithError('new_reservation.php','no machine is free in this time slot');
+	}
+	
+	$stmt = $conn->prepare("INSERT INTO reservations(starting_hour, starting_minute, ending_hour, ending_minute, machine, user_id) VALUES(?, ?, ?, ?, ?, ?)");
+	if(!$stmt) {
+		$conn->query("UNLOCK TABLES");
+		goToWithError('new_reservation.php','prepare insert');
+	}
+	if(!$stmt->bind_param("iiiiii", $starting_hour, $starting_minute, $ending_hour, $ending_minute, $machine, $_SESSION["user_id"])) {
+		$conn->query("UNLOCK TABLES");
+		goToWithError('new_reservation.php','bind_param insert');
+	}
+	if(!$stmt->execute()) {
+		$conn->query("UNLOCK TABLES");
+		goToWithError('new_reservation.php','execute insert');
 	}
 	// the id of the last inserted value
 	$id = $conn->insert_id;
 	if(!$conn->commit()) {
+		$conn->query("UNLOCK TABLES");
 		goToWithError('new_reservation.php','commit');
+	}
+	if(!$conn->query("UNLOCK TABLES")) {
+		goToWithError('new_reservation.php','lock release failed');
 	}
 	$reservation->duration = $duration;
 	$reservation->starting_minute = $starting_minute;
 	$reservation->starting_hour = $starting_hour;
-	$reservation->machine = 1;
+	$reservation->ending_minute = $ending_minute;
+	$reservation->ending_hour = $ending_hour;
+	$reservation->machine = $machine;
 	$reservation->id = $id;
 	return $reservation;
 }

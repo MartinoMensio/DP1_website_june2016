@@ -8,7 +8,9 @@ if(empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] != 'on') {
 }
 
 $maxInactiveTime = 60 * 2;
-$loginPage = "login.html";
+$numberOfMachines = 4;
+
+$loginPage = "login.php";
 
 // check which db to use
 $useLocalDb = false;
