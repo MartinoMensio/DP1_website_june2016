@@ -12,7 +12,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
 <title>Machine reservation - New reservation</title>
 <link rel="stylesheet" type="text/css" href="lib/w3.css">
 <link rel="stylesheet" type="text/css" href="mystyle.css">

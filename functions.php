@@ -91,7 +91,7 @@ function getRequiredPostArgument($conn, $name) {
 		header('Location: '.$loginPage);
 		die();
 	}
-	$result = $conn->real_escape_string(htmlentities($_POST[$name]));
+	$result = $conn->real_escape_string(htmlentities(trim($_POST[$name])));
 	return $result;
 }
 
