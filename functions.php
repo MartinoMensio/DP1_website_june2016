@@ -18,6 +18,7 @@ function checkAuthentication($redirect) {
 		//var_dump($_SESSION);
 	} else {
 		// valid session
+		$_SESSION['timeout'] = time();
 		$authenticated = true;
 	}
 }
