@@ -36,10 +36,10 @@
     echo '</h1>';
     echo '<button type="button" onclick="hideError()">OK</button>';
     echo '</div>';
-    echo '<div id="login_form" class="hidden">';
+    echo '<div id="new_form" class="hidden">';
   } else {
     $error = false;
-    echo '<div id="login_form" class="visible">';
+    echo '<div id="new_form" class="visible">';
   }
 ?>
 <form action="reservation_submit.php" method="post">
@@ -55,7 +55,7 @@
 <script type="text/javascript">
 function hideError() {
   document.getElementById('error').className = 'hidden';
-  document.getElementById('login_form').className = 'visible';
+  document.getElementById('new_form').className = 'visible';
 }
 </script>
 </body>
