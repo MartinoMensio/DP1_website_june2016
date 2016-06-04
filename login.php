@@ -30,8 +30,8 @@
 <form action="login_validate.php" method="post">
   <input type="text" value="login" hidden="hidden" name="type" />
   <table>
-  <tr><td>Username (email):</td><td><input type="email" required="required" name="email" /></td></tr>
-  <tr><td>Password:</td><td><input type="password" required="required" name="password" /></td></tr>
+  <tr><td>Username (email):</td><td><input type="email" maxlength="50" required="required" name="email" /></td></tr>
+  <tr><td>Password:</td><td><input type="password" maxlength="50" required="required" name="password" /></td></tr>
   </table>
   <input type="submit" value="Login" />
   
@@ -42,10 +42,10 @@
   <form action="login_validate.php" method="post">
     <input type="text" value="register" hidden="hidden" name="type" />
     <table>
-    <tr><td>Name:</td><td><input type="text" required="required" name="name" /></td></tr>
-    <tr><td>Surname:</td><td><input type="text" required="required" name="surname" /></td></tr>
-    <tr><td>Email:</td><td><input type="email" required="required" name="email" /></td></tr>
-    <tr><td>Password:</td><td><input type="password" required="required" name="password" /></td></tr>
+    <tr><td>Name:</td><td><input type="text" maxlength="50" required="required" name="name" /></td></tr>
+    <tr><td>Surname:</td><td><input type="text" maxlength="50" required="required" name="surname" /></td></tr>
+    <tr><td>Email:</td><td><input type="email" maxlength="50" required="required" name="email" /></td></tr>
+    <tr><td>Password:</td><td><input type="password" maxlength="50" required="required" name="password" /></td></tr>
     </table>
     <input type="submit" value="Register" />
   </form>
