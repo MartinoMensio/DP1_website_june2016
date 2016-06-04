@@ -261,6 +261,38 @@ function insertNewReservation($conn, $duration, $starting_minute, $starting_hour
 }
 
 function removeReservation($conn, $id) {
+	// TODO for update?
+	$stmt = $conn->prepare("SELECT starting_hour, starting_minute FROM reservations WHERE id = ? FOR UPDATE");
+	if(!$stmt) {
+		goToWithError('list_user_reservations.php','prepare select');
+	}
+	if(!$stmt->bind_param("i", $id)) {
+		goToWithError('list_user_reservations.php','bind_param select');
+	}
+	if(!$stmt->execute()) {
+		goToWithError('list_user_reservations.php','execute select');
+	}
+	if(!$stmt->bind_result($starting_hour, $starting_minute)) {
+		goToWithError('login.php','bind_result select');
+	}
+	if(!$stmt->fetch()) {
+		// gets there when the selects founds 0 rows
+		goToWithError('login.php','reservation not found. Impossible to delete it');
+	}
+	$curTime = date('H:i');
+	$pieces = explode(":", $curTime);
+	$timeBeforeStart = ($starting_hour-$pieces[0])*60 + $starting_minute - $pieces[1];
+	//echo "time: $curTime";
+	//echo "$starting_hour:$starting_minute";
+	//echo $timeBeforeStart;
+	//die();
+	if ($timeBeforeStart < 1) {
+		goToWithError('list_user_reservations.php', 'Reservation start time is passed or too near to delete');
+	}
+	// clean up $stmt
+	unset($stmt);
+	
+	
 	$stmt = $conn->prepare("DELETE FROM reservations WHERE id = ?");
 	if(!$stmt) {
 		goToWithError('list_user_reservations.php','prepare');
