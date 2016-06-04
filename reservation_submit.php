@@ -11,6 +11,7 @@
   if($_REQUEST["type"] === "add") {
     $duration = getRequiredPostArgument($conn, "duration");
     $start_time = getRequiredPostArgument($conn, "start_time");
+    // TODO check values of duration and start time
     $pieces = explode(":", $start_time);
     $starting_minute = $pieces[1];
     $starting_hour = $pieces[0];

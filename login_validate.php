@@ -6,7 +6,6 @@
     die();
   }
   $conn = connectToDb();
-  // TODO move login and signup into functions.php
   if($_POST["type"] === "login") {
     // check the login info from DB
     $email = getRequiredPostArgument($conn, "email");
@@ -19,6 +18,15 @@
     $surname = getRequiredPostArgument($conn, "surname");
     $email = getRequiredPostArgument($conn, "email");
     $password = md5(getRequiredPostArgument($conn, "password"));
+    if(strlen($name) > 50) {
+      goToWithError($loginPage, 'Name too long');
+    }
+    if(strlen($surname) > 50) {
+      goToWithError($loginPage, 'Surname too long');
+    }
+    if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+      goToWithError($loginPage, 'Invalid email');
+    }
     //var_dump($password);
     signup($conn, $name, $surname, $email, $password);
   } else {
