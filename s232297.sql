@@ -1,16 +1,5 @@
-DROP TABLE `reservations`;
-DROP TABLE `users`;
-
-CREATE TABLE `reservations` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `starting_hour` int(11) NOT NULL,
-  `starting_minute` int(11) NOT NULL,
-  `ending_hour` int(11) NOT NULL,
-  `ending_minute` int(11) NOT NULL,
-  `machine` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-);
+DROP TABLE IF EXISTS `reservations`;
+DROP TABLE IF EXISTS `users`;
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -20,6 +9,18 @@ CREATE TABLE `users` (
   `password` varchar(50) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
+);
+
+CREATE TABLE `reservations` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `starting_hour` int(11) NOT NULL,
+  `starting_minute` int(11) NOT NULL,
+  `ending_hour` int(11) NOT NULL,
+  `ending_minute` int(11) NOT NULL,
+  `machine` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`user_id`) REFERENCES `users`(`id`)
 );
 
 -- values
