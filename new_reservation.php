@@ -44,7 +44,7 @@
 <form action="reservation_submit.php" method="post">
   <input type="text" value="add" hidden="hidden" name="type" />
   <table>
-  <tr><td>Duration (minutes):</td><td><input type="number" min="0" max="1439" required="required" name="duration" /></td></tr>
+  <tr><td>Duration (minutes):</td><td><input type="number" min="0" max="1439" required="required" name="duration" placeholder="duration in minutes" /></td></tr>
   <tr><td>Start time:</td><td><input type="time" required="required" name="start_time" /></td></tr>
   </table>
   <input type="submit" value="submit" />
