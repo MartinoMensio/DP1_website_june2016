@@ -6,7 +6,7 @@
 <link rel="stylesheet" type="text/css" href="mystyle.css">
 </head>
 <body>
-<div class="w3-container w3-teal w3-center w3-animate-top">
+<div class="w3-container w3-indigo w3-center w3-animate-top">
 <!-- the title must be dynamic -->
 	<h1>Machine Reservations - Login</h1>
 </div>
@@ -25,30 +25,32 @@
   }
 ?>
 <a href="index.php" class="w3-padding-medium">no login, go to homepage</a>
-<div class="w3-sidenav w3-animate-left w3-padding-medium" style="width:50%">
-<h1>Login</h1>
-<form action="login_validate.php" method="post">
-  <input type="text" value="login" hidden="hidden" name="type" />
-  <table>
-  <tr><td>Username (email):</td><td><input type="email" maxlength="50" required="required" name="email" placeholder="your email" /></td></tr>
-  <tr><td>Password:</td><td><input type="password" maxlength="50" required="required" name="password" placeholder="password" /></td></tr>
-  </table>
-  <input type="submit" value="Login" />
-  
-</form>
-</div>
-<div class=" w3-animate-right w3-padding-medium" style="margin-left:50%">
-  <h1>Register</h1>
-  <form action="login_validate.php" method="post">
-    <input type="text" value="register" hidden="hidden" name="type" />
-    <table>
-    <tr><td>Name:</td><td><input type="text" maxlength="50" required="required" name="name" placeholder="your name" /></td></tr>
-    <tr><td>Surname:</td><td><input type="text" maxlength="50" required="required" name="surname" placeholder="your surname" </td></tr>
-    <tr><td>Email:</td><td><input type="email" maxlength="50" required="required" name="email" placeholder="your email" /></td></tr>
-    <tr><td>Password:</td><td><input type="password" maxlength="50" required="required" name="password" placeholder="your new password" /></td></tr>
-    </table>
-    <input type="submit" value="Register" />
-  </form>
+<div class="w3-row">
+  <div class="w3-half w3-animate-left w3-padding-medium" style="width:50%">
+    <h1>Login</h1>
+    <form action="login_validate.php" method="post">
+      <input type="text" value="login" hidden="hidden" name="type" />
+      <table>
+      <tr><td>Username (email):</td><td><input type="email" maxlength="50" required="required" name="email" placeholder="your email" /></td></tr>
+      <tr><td>Password:</td><td><input type="password" maxlength="50" required="required" name="password" placeholder="password" /></td></tr>
+      </table>
+      <input type="submit" value="Login" />
+      
+    </form>
+  </div>
+  <div class=" w3-half w3-padding-medium" >
+    <h1>Register</h1>
+    <form action="login_validate.php" method="post">
+      <input type="text" value="register" hidden="hidden" name="type" />
+      <table>
+      <tr><td>Name:</td><td><input type="text" maxlength="50" required="required" name="name" placeholder="your name" /></td></tr>
+      <tr><td>Surname:</td><td><input type="text" maxlength="50" required="required" name="surname" placeholder="your surname" </td></tr>
+      <tr><td>Email:</td><td><input type="email" maxlength="50" required="required" name="email" placeholder="your email" /></td></tr>
+      <tr><td>Password:</td><td><input type="password" maxlength="50" required="required" name="password" placeholder="your new password" /></td></tr>
+      </table>
+      <input type="submit" value="Register" />
+    </form>
+  </div>
 </div>
 </div>
 <script type="text/javascript">

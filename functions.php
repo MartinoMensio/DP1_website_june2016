@@ -47,7 +47,7 @@ function listAllReservations($conn) {
 	if($conn->affected_rows == 0) {
 		die("no data is stored");
 	}
-	echo '<table>';
+	echo '<table class="w3-table w3-bordered w3-striped">';
 	echo '<tr><th>Starting time</th><th>Ending time</th><th>Duration (minutes)</th><th>Selected machine</th></tr>';
 	while($row = $query->fetch_object()) {
 		$duration = $row->ending_hour*60 + $row->ending_minute -$row->starting_hour*60 - $row->starting_minute;
@@ -64,7 +64,7 @@ function listUserReservations($conn) {
 	if($conn->affected_rows == 0) {
 		die("no data is stored");
 	}
-	echo '<table>';
+	echo '<table class="w3-table w3-bordered w3-striped">';
 	echo '<tr><th>Starting time</th><th>Ending time</th><th>Duration (minutes)</th><th>Selected machine</th></tr>';
 	while($row = $query->fetch_object()) {
 		$duration = $row->ending_hour*60 + $row->ending_minute -$row->starting_hour*60 - $row->starting_minute;
@@ -273,11 +273,11 @@ function removeReservation($conn, $id) {
 		goToWithError('list_user_reservations.php','execute select');
 	}
 	if(!$stmt->bind_result($starting_hour, $starting_minute)) {
-		goToWithError('login.php','bind_result select');
+		goToWithError('list_user_reservations.php','bind_result select');
 	}
 	if(!$stmt->fetch()) {
 		// gets there when the selects founds 0 rows
-		goToWithError('login.php','reservation not found. Impossible to delete it');
+		goToWithError('list_user_reservations.php','reservation not found. Impossible to delete it');
 	}
 	$curTime = date('H:i');
 	$pieces = explode(":", $curTime);
