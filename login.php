@@ -34,7 +34,7 @@
       <tr><td>Username (email):</td><td><input type="email" maxlength="50" required="required" name="email" placeholder="your email" /></td></tr>
       <tr><td>Password:</td><td><input type="password" maxlength="50" required="required" name="password" placeholder="password" /></td></tr>
       </table>
-      <input type="submit" value="Login" />
+      <input class="w3-btn w3-indigo" type="submit" value="Login" />
       
     </form>
   </div>
@@ -48,7 +48,7 @@
       <tr><td>Email:</td><td><input type="email" maxlength="50" required="required" name="email" placeholder="your email" /></td></tr>
       <tr><td>Password:</td><td><input type="password" maxlength="50" required="required" name="password" placeholder="your new password" /></td></tr>
       </table>
-      <input type="submit" value="Register" />
+      <input class="w3-btn w3-indigo" type="submit" value="Register" />
     </form>
   </div>
 </div>
