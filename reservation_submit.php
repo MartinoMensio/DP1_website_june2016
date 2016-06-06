@@ -15,6 +15,15 @@
     $pieces = explode(":", $start_time);
     $starting_minute = $pieces[1];
     $starting_hour = $pieces[0];
+    if ($starting_hour < 0 || $starting_hour > 23 || $starting_minute < 0 || $starting_minute > 59) {
+      goToWithError('new_reservation.php', 'Invalid starting hour');
+    }
+    if ($duration < 0 || $duration > 60 * 24 - 1) {
+      goToWithError('new_reservation.php', 'Invalid duration');
+    }
+    if ($starting_hour * 60 + $starting_minute + $duration > 60*24 - 1) {
+      goToWithError('new_reservation.php', 'The reservation finishes the next day');
+    }
     $reservation = insertNewReservation($conn, $duration, $starting_minute, $starting_hour);
   } else if($_REQUEST["type"] === "remove") {
     //echo 'you want to remove id ='.$_REQUEST["id"];
