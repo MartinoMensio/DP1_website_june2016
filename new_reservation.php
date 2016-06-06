@@ -33,7 +33,7 @@
     echo '<div id="error" class="w3-padding-medium"><h1>';
     echo 'Error: '.htmlentities($error);
     echo '</h1>';
-    echo '<button type="button" onclick="hideError()">OK</button>';
+    echo '<button class="w3-btn w3-indigo" type="button" onclick="hideError()">OK</button>';
     echo '</div>';
     echo '<div id="new_form" class="hidden">';
   } else {
@@ -47,7 +47,7 @@
   <tr><td>Duration (minutes):</td><td><input type="number" min="0" max="1439" required="required" name="duration" placeholder="duration in minutes" /></td></tr>
   <tr><td>Start time:</td><td><input type="time" required="required" name="start_time" /></td></tr>
   </table>
-  <input type="submit" value="submit" />
+  <input class="w3-btn w3-indigo" type="submit" value="create reservation" />
 </form>
 </div>
 </div>

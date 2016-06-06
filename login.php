@@ -16,7 +16,7 @@
     echo '<div id="error" class="w3-padding-medium"><h1>';
     echo 'Error: '.htmlentities($error);
     echo '</h1>';
-    echo '<button type="button" onclick="hideError()">OK</button>';
+    echo '<button class="w3-btn w3-indigo" type="button" onclick="hideError()">OK</button>';
     echo '</div>';
     echo '<div id="login_form" class="hidden">';
   } else {
