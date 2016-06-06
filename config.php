@@ -8,26 +8,6 @@ if(empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] != 'on') {
 }
 
 function checkCookies() {
-	//echo sizeof($_REQUEST);
-	/*
-	if(isset($_REQUEST["testing"])) {
-		// cookie has been set by last visit, verify it
-		if(!isset($_COOKIE["test"])) {
-			// cookies are disabled
-			die('<h1>you must enable cookies to view this site</h1>');
-		}
-	} else if (!isset($_COOKIE["test"])) {
-		// this is the first visit, or cookies disabled
-		setcookie('test', 'hello');
-		if (sizeof($_REQUEST)) {
-			// add a new argument
-			header('Location: https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . "&testing", TRUE, 301);
-		} else {
-			// this is the only argument
-			header('Location: https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . "?testing", TRUE, 301);
-		}
-	}
-	*/
 	setcookie('test', 1);
 	if(!isset($_GET['cookies'])){
 		if (sizeof($_GET)) {
