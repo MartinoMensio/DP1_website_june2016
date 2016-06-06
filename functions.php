@@ -84,7 +84,7 @@ function sidenavPrint() {
 		echo '<a href="list_user_reservations.php">list my reservations</a>';
 		echo '<a href="logout.php">logout</a>';
 	} else {
-		echo "<a href=\"$loginPage\">login</a>";
+		echo "<a href=\"$loginPage\">login or register</a>";
 	}
 }
 
