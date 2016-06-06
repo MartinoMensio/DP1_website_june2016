@@ -26,7 +26,9 @@ function checkCookies() {
 
 }
 
-checkCookies();
+if (!isset($_COOKIE['test'])) {
+	checkCookies();
+}
 
 $maxInactiveTime = 60 * 2;
 $numberOfMachines = 4;
