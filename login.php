@@ -14,6 +14,7 @@
 <div class="w3-container w3-indigo w3-center w3-animate-top">
 <!-- the title must be dynamic -->
 	<h1>Machine Reservations - Login</h1>
+  <h1 class="w3-red"><noscript>warning: Javascript is disabled, some functions may not work</noscript></h1>
 </div>
 <div class="w3-sidenav w3-light-blue w3-card-8 w3-animate-left" style="width:25%">
 	<?php
