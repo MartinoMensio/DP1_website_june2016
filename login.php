@@ -1,3 +1,8 @@
+<?php
+  require 'functions.php';
+  // this page requires authentication
+  checkAuthentication(false);
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,7 +15,14 @@
 <!-- the title must be dynamic -->
 	<h1>Machine Reservations - Login</h1>
 </div>
-<?php
+<div class="w3-sidenav w3-light-blue w3-card-8 w3-animate-left" style="width:25%">
+	<?php
+    sidenavPrint();
+  ?> 
+</div>
+<a href="index.php" class="w3-padding-medium">no login, go to homepage</a>
+<div class="w3-row" style="margin-left:25%">
+  <?php
   if(isset($_REQUEST["error"])) {
     $error = $_REQUEST["error"];
     echo '<div id="error" class="w3-padding-medium"><h1>';
@@ -24,8 +36,6 @@
     echo '<div id="login_form" class="visible">';
   }
 ?>
-<a href="index.php" class="w3-padding-medium">no login, go to homepage</a>
-<div class="w3-row">
   <div class="w3-half w3-animate-left w3-padding-medium" style="width:50%">
     <h1>Login</h1>
     <form action="login_validate.php" method="post">
@@ -38,7 +48,7 @@
       
     </form>
   </div>
-  <div class=" w3-half w3-padding-medium" >
+  <div class="w3-half w3-animate-right w3-padding-medium" >
     <h1>Register</h1>
     <form action="login_validate.php" method="post">
       <input type="text" value="register" hidden="hidden" name="type" />
