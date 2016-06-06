@@ -20,7 +20,6 @@
     sidenavPrint();
   ?> 
 </div>
-<a href="index.php" class="w3-padding-medium">no login, go to homepage</a>
 <div class="w3-row" style="margin-left:25%">
   <?php
   if(isset($_REQUEST["error"])) {
