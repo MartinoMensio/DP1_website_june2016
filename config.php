@@ -36,15 +36,20 @@ $numberOfMachines = 4;
 $loginPage = "login.php";
 
 // check which db to use
-$useLocalDb = false;
-if ($useLocalDb) {
+$database = "cclix";
+if ($database === "local") {
 	$host = "localhost";
 	$user = "root";
 	$pwd = "";
 	$db = "machines_reservation";
-} else {
+} else if($database === "azure") {
 	$host = "us-cdbr-azure-west-c.cloudapp.net";
 	$user = "b411bdc8084ca4";
 	$pwd = "fdd4ffbb";
 	$db = "dp-web-jun16-martinomensio";
+} else {
+	$host = "localhost";
+	$user = "s232297";
+	$pwd = "angstshs";
+	$db = "s232297";
 }
