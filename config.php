@@ -48,7 +48,7 @@ if ($database === "local") {
 	$pwd = "fdd4ffbb";
 	$db = "dp-web-jun16-martinomensio";
 } else {
-	$host = "cclix11.polito.it";
+	$host = "localhost";
 	$user = "s232297";
 	$pwd = "angstshs";
 	$db = "s232297";
