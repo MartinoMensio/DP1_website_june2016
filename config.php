@@ -36,7 +36,7 @@ $numberOfMachines = 4;
 $loginPage = "login.php";
 
 // check which db to use
-$database = "cclix";
+$database = "azure";
 if ($database === "local") {
 	$host = "localhost";
 	$user = "root";
@@ -48,7 +48,7 @@ if ($database === "local") {
 	$pwd = "fdd4ffbb";
 	$db = "dp-web-jun16-martinomensio";
 } else {
-	$host = "localhost";
+	$host = "cclix11.polito.it";
 	$user = "s232297";
 	$pwd = "angstshs";
 	$db = "s232297";
