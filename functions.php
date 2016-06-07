@@ -199,7 +199,7 @@ function insertNewReservation($conn, $duration, $starting_minute, $starting_hour
 	
 	UNLOCK TABLES;
 	*/
-	$machines = [];
+	$machines = array();
 	for($i = 0; $i < $numberOfMachines; $i++) {
 		$machines[$i] = true;
 	}
