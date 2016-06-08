@@ -10,7 +10,7 @@
     // check the login info from DB
     $email = getRequiredPostArgument($conn, "email");
     // TODO password must not be escaped, because it can be weakened
-    $password = md5(getRequiredPostArgument($conn, "password"));
+    $password = sha1(getRequiredPostArgument($conn, "password", false));
     
     login($conn, $email, $password);
   } else if($_POST["type"] === "register") {
@@ -19,7 +19,7 @@
     $surname = getRequiredPostArgument($conn, "surname");
     $email = getRequiredPostArgument($conn, "email");
     // TODO password must not be escaped, because it can be weakened
-    $password = md5(getRequiredPostArgument($conn, "password"));
+    $password = sha1(getRequiredPostArgument($conn, "password", false));
     if(strlen($name) > 50) {
       goToWithError($loginPage, 'Name too long');
     }

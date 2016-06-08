@@ -6,7 +6,7 @@ CREATE TABLE `users` (
   `name` varchar(50) NOT NULL,
   `surname` varchar(50) NOT NULL,
   `email` varchar(50) NOT NULL,
-  `password` varchar(50) NOT NULL,
+  `password` varchar(50) NOT NULL, -- SHA1 is 160bit -> 20bytes -> 40 hex char
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
 );
@@ -26,9 +26,9 @@ CREATE TABLE `reservations` (
 -- values
 
 INSERT INTO `users` (`id`, `name`, `surname`, `email`, `password`) VALUES
-(1, 'u1', 'test', 'u1@p.it', MD5('p')),
-(2, 'u2', 'test', 'u2@p.it', MD5('p2')),
-(3, 'u3', 'test', 'u3@p.it', MD5('p3'));
+(1, 'u1', 'test', 'u1@p.it', SHA1('p')),
+(2, 'u2', 'test', 'u2@p.it', SHA1('p2')),
+(3, 'u3', 'test', 'u3@p.it', SHA1('p3'));
 
 INSERT INTO `reservations` (`starting_hour`, `starting_minute`, `ending_hour`, `ending_minute`, `machine`, `user_id`) VALUES
 -- u1

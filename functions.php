@@ -89,14 +89,22 @@ function sidenavPrint() {
 	}
 }
 
-function getRequiredPostArgument($conn, $name) {
+function getRequiredPostArgument($conn, $name, $escape = true) {
 	global $loginPage;
 	//var_dump($_POST[$name]);
 	if(!isset($_POST[$name])) {
 		header('Location: '.$loginPage);
 		die();
 	}
-	$result = $conn->real_escape_string(htmlentities(trim($_POST[$name])));
+	if ($escape) {
+		$result = $conn->real_escape_string(htmlentities(trim($_POST[$name])));
+	} else {
+		// only prevent SQL injection, but not escape HTML characters
+		// this is used for the passwords
+		// SQL injection can also be prevented by using prepared statements, but just to be sure use the real_escape_string method
+		// passwords are never displayed, so escaping html special characters has no reason to be done
+		$result = $conn->real_escape_string($_POST[$name]);
+	}
 	return $result;
 }
 
