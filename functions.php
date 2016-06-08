@@ -28,6 +28,7 @@ function checkAuthentication($redirect) {
 function connectToDb() {
 	global $host, $user, $pwd, $db;
 	$conn = new mysqli($host, $user, $pwd, $db);
+	// TODO catch errors of connection
 	if(!$conn) {
 		die("impossible to connect to database");
 	}
@@ -281,13 +282,13 @@ function removeReservation($conn, $id) {
 	}
 	$curTime = date('H:i');
 	$pieces = explode(":", $curTime);
-	$timeBeforeStart = ($starting_hour-$pieces[0])*60 + $starting_minute - $pieces[1];
+	$timeAfterStart = ($pieces[0] - $starting_hour)*60 + $pieces[1] - $starting_minute;
 	//echo "time: $curTime";
 	//echo "$starting_hour:$starting_minute";
 	//echo $timeBeforeStart;
 	//die();
-	if ($timeBeforeStart < 1) {
-		goToWithError('list_user_reservations.php', 'Reservation start time is passed or too near to delete');
+	if ($timeAfterStart < 1) {
+		goToWithError('list_user_reservations.php', 'In order to delete a reservation, at least 1 minute has to pass since the start time');
 	}
 	// clean up $stmt
 	unset($stmt);
