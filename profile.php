@@ -13,8 +13,8 @@
 <html>
 <head>
 <title>Machine reservation - Profile</title>
-<link rel="stylesheet" type="text/css" href="lib/w3.css">
-<link rel="stylesheet" type="text/css" href="mystyle.css">
+<link rel="stylesheet" type="text/css" href="lib/w3.css" />
+<link rel="stylesheet" type="text/css" href="mystyle.css" />
 </head>
 <body>
 <div class="w3-container w3-indigo w3-center w3-animate-top">
@@ -30,9 +30,9 @@
 <div class="w3-animate-right w3-padding-medium" style="margin-left:25%">
   <table class="w3-table w3-bordered w3-striped">
 <?php
-  echo '<tr><td>name:</td><td>'.$_SESSION['name'].'</td><tr>';
-  echo '<tr><td>surname:</td><td>'.$_SESSION['surname'].'</td><tr>';
-  echo '<tr><td>email:</td><td>'.$_SESSION['email'].'</td><tr>';
+  echo '<tr><td>name:</td><td>'.$_SESSION['name'].'</td></tr>';
+  echo '<tr><td>surname:</td><td>'.$_SESSION['surname'].'</td></tr>';
+  echo '<tr><td>email:</td><td>'.$_SESSION['email'].'</td></tr>';
 ?>
 </table>
 </div>

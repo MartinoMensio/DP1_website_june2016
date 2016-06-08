@@ -7,8 +7,8 @@
 <html>
 <head>
 <title>Machine reservation</title>
-<link rel="stylesheet" type="text/css" href="lib/w3.css">
-<link rel="stylesheet" type="text/css" href="mystyle.css">
+<link rel="stylesheet" type="text/css" href="lib/w3.css" />
+<link rel="stylesheet" type="text/css" href="mystyle.css" />
 </head>
 <body>
 <div class="w3-container w3-indigo w3-center w3-animate-top">
@@ -54,7 +54,7 @@
       <input type="text" value="register" hidden="hidden" name="type" />
       <table>
       <tr><td>Name:</td><td><input type="text" maxlength="50" required="required" name="name" placeholder="your name" /></td></tr>
-      <tr><td>Surname:</td><td><input type="text" maxlength="50" required="required" name="surname" placeholder="your surname" </td></tr>
+      <tr><td>Surname:</td><td><input type="text" maxlength="50" required="required" name="surname" placeholder="your surname" /></td></tr>
       <tr><td>Email:</td><td><input type="email" maxlength="50" required="required" name="email" placeholder="your email" /></td></tr>
       <tr><td>Password:</td><td><input type="password" maxlength="50" required="required" name="password" placeholder="your new password" /></td></tr>
       </table>

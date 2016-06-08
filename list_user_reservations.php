@@ -11,10 +11,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
 <title>Machine reservation - Personal</title>
-<link rel="stylesheet" type="text/css" href="lib/w3.css">
-<link rel="stylesheet" type="text/css" href="mystyle.css">
+<link rel="stylesheet" type="text/css" href="lib/w3.css" />
+<link rel="stylesheet" type="text/css" href="mystyle.css" />
 </head>
 <body>
 <div class="w3-container w3-indigo w3-center w3-animate-top">
@@ -45,6 +44,7 @@
 <?php
   listUserReservations($conn);
 ?>
+</div>
 </div>
 <script type="text/javascript">
 function remove_reservation(id) {
