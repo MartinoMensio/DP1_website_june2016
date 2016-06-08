@@ -170,9 +170,7 @@ function signup($conn, $name, $surname, $email, $password) {
 
 function insertNewReservation($conn, $duration, $starting_minute, $starting_hour) {
 	global $numberOfMachines;
-	// TODO check values of three parameters
-	// TODO check overlapping reservations (SELECT locking)
-	// TODO machine choose
+	// values of parameters are checked by caller
 	$reservation = new stdClass();
 	
 	$ending_minute = ($starting_minute + $duration) % 60;
@@ -181,25 +179,8 @@ function insertNewReservation($conn, $duration, $starting_minute, $starting_hour
 	$starting_time = $starting_minute+60*$starting_hour;
 	$ending_time = $ending_minute+60*$ending_hour;
 	
-	//echo "$ending_hour:$ending_minute";
-	
 	// also if not released explicitly, on rollback (caused by die) the tables are unlocked
-	/*
-	LOCK TABLES reservations WRITE;
 	
-	SELECT machine FROM reservations
-	WHERE starting_hour < sh
-	AND starting_minute < sm
-	AND ending_hour > eh
-	AND ending_minute > em;
-
-	for each of them, remove from the available ones
-	and see if some is still available
-	
-	INSERT INTO reservations ...;
-	
-	UNLOCK TABLES;
-	*/
 	$machines = array();
 	for($i = 0; $i < $numberOfMachines; $i++) {
 		$machines[$i] = true;

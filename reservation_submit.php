@@ -13,6 +13,9 @@
     $start_time = getRequiredPostArgument($conn, "start_time");
     // TODO check values of duration and start time
     $pieces = explode(":", $start_time);
+    if (count($pieces) != 2) {
+      goToWithError('new_reservation.php', 'Invalid format for starting hour');
+    }
     $starting_minute = $pieces[1];
     $starting_hour = $pieces[0];
     if ($starting_hour < 0 || $starting_hour > 23 || $starting_minute < 0 || $starting_minute > 59) {
