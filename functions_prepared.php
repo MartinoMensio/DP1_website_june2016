@@ -41,38 +41,36 @@ function connectToDb() {
 }
 
 function listAllReservations($conn) {
-	$result = $conn->query("SELECT * FROM reservations ORDER BY starting_hour, starting_minute");
-	if(!$result) {
+	$query = $conn->query("SELECT * FROM reservations ORDER BY starting_hour, starting_minute");
+	if(!$query) {
 		die("impossible to list the reservations");
 	}
-	if($result->num_rows == 0) {
+	if($conn->affected_rows == 0) {
 		die("no data is stored");
 	}
 	echo '<table class="w3-table w3-bordered w3-striped">';
 	echo '<tr><th>Starting time</th><th>Ending time</th><th>Duration (minutes)</th><th>Selected machine</th></tr>';
-	while($row = $result->fetch_object()) {
+	while($row = $query->fetch_object()) {
 		$duration = $row->ending_hour*60 + $row->ending_minute -$row->starting_hour*60 - $row->starting_minute;
 		echo "<tr><td>".sprintf("%02d:%02d",$row->starting_hour, $row->starting_minute)."</td><td>".sprintf("%02d:%02d",$row->ending_hour, $row->ending_minute)."</td><td>".$duration."</td><td>".$row->machine."</td></tr>";
 	}
-	$result->close();
 	echo '</table>';
 }
 
 function listUserReservations($conn) {
-	$result = $conn->query("SELECT * FROM reservations WHERE user_id =".$_SESSION["user_id"]." ORDER BY starting_hour, starting_minute");
-	if(!$result) {
+	$query = $conn->query("SELECT * FROM reservations WHERE user_id =".$_SESSION["user_id"]." ORDER BY starting_hour, starting_minute");
+	if(!$query) {
 		die("impossible to list the reservations");
 	}
-	if($result->num_rows == 0) {
+	if($conn->affected_rows == 0) {
 		die("no data is stored");
 	}
 	echo '<table class="w3-table w3-bordered w3-striped">';
 	echo '<tr><th>Starting time</th><th>Ending time</th><th>Duration (minutes)</th><th>Selected machine</th></tr>';
-	while($row = $result->fetch_object()) {
+	while($row = $query->fetch_object()) {
 		$duration = $row->ending_hour*60 + $row->ending_minute -$row->starting_hour*60 - $row->starting_minute;
 		echo "<tr><td>".sprintf("%02d:%02d",$row->starting_hour, $row->starting_minute)."</td><td>".sprintf("%02d:%02d",$row->ending_hour, $row->ending_minute)."</td><td>".$duration."</td><td>".$row->machine.'</td><td><button class="w3-btn w3-indigo" type="button" onclick="remove_reservation('.$row->id.')">Remove</button></td></tr>';
 	}
-	$result->close();
 	echo '</table>';
 }
 
@@ -121,30 +119,46 @@ function goToDestination($destination) {
 }
 
 function login($conn, $email, $password) {
-	$result = $conn->query("SELECT name, surname, id FROM users WHERE email = '$email' AND password = '$password'");
-	if(!$result) {
-		goToWithError('login.php',"impossible to create the query");
+	$stmt = $conn->prepare("SELECT name, surname, id FROM users WHERE email = ? AND password = ?");
+	if(!$stmt) {
+		goToWithError('login.php','prepare');
 	}
-	if($result->num_rows == 0) {
-		goToWithError('login.php','Wrong credentials');
+	if(!$stmt->bind_param("ss", $email, $password)) {
+		goToWithError('login.php','bind_param');
 	}
-	if(!($row = $result->fetch_object())) {
-		goToWithError('login.php','Error fetching the result');
+	if(!$stmt->execute()) {
+		goToWithError('login.php','execute');
 	}
-	$result->close();
+	if(!$stmt->bind_result($name, $surname, $id)) {
+		goToWithError('login.php','bind_result');
+	}
+	if(!$stmt->fetch()) {
+		// gets there when the selects founds 0 rows
+		goToWithError('login.php','account not found. Please check your data');
+	}
+	/* // don't need to commit for a select statement
+	if(!$conn->commit()) {
+		goToWithError('login.html','commit');
+	}*/
   $_SESSION['timeout'] = time();
-  $_SESSION['name'] = $row->name;
-  $_SESSION['surname'] = $row->surname;
+  $_SESSION['name'] = $name;
+  $_SESSION['surname'] = $surname;
   $_SESSION['email'] = $email;
   $_SESSION['password'] = $password;
-  $_SESSION['user_id'] = $row->id;
+  $_SESSION['user_id'] = $id;
   //var_dump($_SESSION);
   goToDestination('index.php');
 }
 
 function signup($conn, $name, $surname, $email, $password) {
-	$result = $conn->query("INSERT INTO users(name, surname, email, password) VALUES('$name', '$surname', '$email', '$password')");
-	if(!$result) {
+	$stmt = $conn->prepare("INSERT INTO users(name, surname, email, password) VALUES(?, ?, ?, ?)");
+	if(!$stmt) {
+		goToWithError('login.php', 'prepare');
+	}
+	if(!$stmt->bind_param("ssss", $name, $surname, $email, $password)) {
+		goToWithError('login.php', 'bind_param');
+	}
+	if(!$stmt->execute()) {
 		goToWithError('login.php', 'impossible to create the account. Maybe the email was already used');
 	}
 	// the id of the last inserted value
@@ -179,14 +193,23 @@ function insertNewReservation($conn, $duration, $starting_minute, $starting_hour
 	for($i = 0; $i < $numberOfMachines; $i++) {
 		$machines[$i] = true;
 	}
-	$result = $conn->query("SELECT machine FROM reservations WHERE starting_hour*60+starting_minute < $ending_time AND ending_hour*60+ending_minute > $starting_time FOR UPDATE");
-	if(!$result) {
-		goToWithError('new_reservation.php','error in the query');
+	$stmt = $conn->prepare("SELECT machine FROM reservations WHERE starting_hour*60+starting_minute < ? AND ending_hour*60+ending_minute > ? FOR UPDATE");
+	if(!$stmt) {
+		goToWithError('new_reservation.php','prepare select');
 	}
-	while ($row = $result->fetch_object()) {
-		$machines[$row->machine] = false;
+	if(!$stmt->bind_param("ii", $ending_time, $starting_time)) {
+		goToWithError('new_reservation.php','bind_param select');
 	}
-	$result->close();
+	if(!$stmt->execute()) {
+		goToWithError('new_reservation.php','execute select');
+	}
+	if(!$stmt->bind_result($machine)) {
+		goToWithError('new_reservation.php', 'bind_result select');
+	}
+	while ($stmt->fetch()) {
+		$machines[$machine] = false;
+	}
+	
 	$machine = -1;
 	
 	for ($i=0; $i < $numberOfMachines; $i++) { 
@@ -202,9 +225,15 @@ function insertNewReservation($conn, $duration, $starting_minute, $starting_hour
 		goToWithError('new_reservation.php','no machine is free in this time slot');
 	}
 	
-	$result = $conn->query("INSERT INTO reservations(starting_hour, starting_minute, ending_hour, ending_minute, machine, user_id) VALUES($starting_hour, $starting_minute, $ending_hour, $ending_minute, $machine, ".$_SESSION["user_id"].")");
-	if(!$result) {
-		goToWithError('new_reservation.php','impossible to insert the reservation');
+	$stmt = $conn->prepare("INSERT INTO reservations(starting_hour, starting_minute, ending_hour, ending_minute, machine, user_id) VALUES(?, ?, ?, ?, ?, ?)");
+	if(!$stmt) {
+		goToWithError('new_reservation.php','prepare insert');
+	}
+	if(!$stmt->bind_param("iiiiii", $starting_hour, $starting_minute, $ending_hour, $ending_minute, $machine, $_SESSION["user_id"])) {
+		goToWithError('new_reservation.php','bind_param insert');
+	}
+	if(!$stmt->execute()) {
+		goToWithError('new_reservation.php','execute insert');
 	}
 	// the id of the last inserted value
 	$id = $conn->insert_id;
@@ -222,20 +251,27 @@ function insertNewReservation($conn, $duration, $starting_minute, $starting_hour
 }
 
 function removeReservation($conn, $id) {
-	$result = $conn->query("SELECT starting_hour, starting_minute FROM reservations WHERE id = $id FOR UPDATE");
-	if(!$result) {
-		goToWithError('list_user_reservations.php','error in query');
+	// TODO for update?
+	$stmt = $conn->prepare("SELECT starting_hour, starting_minute FROM reservations WHERE id = ? FOR UPDATE");
+	if(!$stmt) {
+		goToWithError('list_user_reservations.php','prepare select');
 	}
-	if($result->num_rows == 0) {
+	if(!$stmt->bind_param("i", $id)) {
+		goToWithError('list_user_reservations.php','bind_param select');
+	}
+	if(!$stmt->execute()) {
+		goToWithError('list_user_reservations.php','execute select');
+	}
+	if(!$stmt->bind_result($starting_hour, $starting_minute)) {
+		goToWithError('list_user_reservations.php','bind_result select');
+	}
+	if(!$stmt->fetch()) {
+		// gets there when the selects founds 0 rows
 		goToWithError('list_user_reservations.php','reservation not found. Impossible to delete it');
 	}
-	if(!($row = $result->fetch_object())) {
-		goToWithError('list_user_reservations.php','error fetching object');
-	}
-	$result->close();
 	$curTime = date('H:i');
 	$pieces = explode(":", $curTime);
-	$timeAfterStart = ($pieces[0] - $row->starting_hour)*60 + $pieces[1] - $row->starting_minute;
+	$timeAfterStart = ($pieces[0] - $starting_hour)*60 + $pieces[1] - $starting_minute;
 	//echo "time: $curTime";
 	//echo "$starting_hour:$starting_minute";
 	//echo $timeBeforeStart;
@@ -247,9 +283,15 @@ function removeReservation($conn, $id) {
 	unset($stmt);
 	
 	
-	$result = $conn->query("DELETE FROM reservations WHERE id = $id");
-	if(!$result) {
-		goToWithError('list_user_reservations.php','impossible to delete, consistency may be lost');
+	$stmt = $conn->prepare("DELETE FROM reservations WHERE id = ?");
+	if(!$stmt) {
+		goToWithError('list_user_reservations.php','prepare');
+	}
+	if(!$stmt->bind_param("i", $id)) {
+		goToWithError('list_user_reservations.php','bind_param');
+	}
+	if(!$stmt->execute()) {
+		goToWithError('list_user_reservations.php','execute');
 	}
 	if(!$conn->commit()) {
 		goToWithError('list_user_reservations.php','commit');
