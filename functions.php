@@ -81,7 +81,7 @@ function sidenavPrint() {
 	echo '<a href="index.php">Homepage (all reservations)</a>';
 	// look if user is logged in (checked by a init function)
 	if($authenticated) {
-		echo '<h1>Hello '.$_SESSION["name"].'</h1>';
+		echo '<h1 class="w3-padding-medium">Hello '.$_SESSION["name"].'</h1>';
 		echo '<a href="profile.php">profile</a>';
 		echo '<a href="new_reservation.php">add reservation</a>';
 		echo '<a href="list_user_reservations.php">list my reservations</a>';
