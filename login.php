@@ -11,17 +11,19 @@
 <link rel="stylesheet" type="text/css" href="mystyle.css" />
 </head>
 <body>
-<div class="w3-container w3-indigo w3-center w3-animate-top">
+<div class="w3-container w3-indigo w3-center topbar">
 <!-- the title must be dynamic -->
 	<h1>Machine Reservations - Login</h1>
-  <h1 class="w3-red"><noscript>warning: Javascript is disabled, some functions may not work</noscript></h1>
 </div>
+<div class="placeholder">i am not visible</div>
 <div class="w3-sidenav w3-light-blue w3-card-8 w3-animate-left" style="width:25%">
 	<?php
     sidenavPrint();
   ?> 
 </div>
+<div class="w3-padding-medium">
 <div class="w3-row" style="margin-left:25%">
+<h1 class="w3-red"><noscript>warning: Javascript is disabled, some functions may not work</noscript></h1>
   <?php
   if(isset($_REQUEST["error"])) {
     $error = $_REQUEST["error"];
@@ -61,6 +63,7 @@
       <input class="w3-btn w3-indigo" type="submit" value="Register" />
     </form>
   </div>
+</div>
 </div>
 </div>
 <script type="text/javascript">

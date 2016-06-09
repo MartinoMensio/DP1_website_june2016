@@ -42,20 +42,22 @@
 <html>
 <head>
 <title>Machine reservation - New reservation</title>
-<link rel="stylesheet" type="text/css" href="lib/w3.css">
-<link rel="stylesheet" type="text/css" href="mystyle.css">
+<link rel="stylesheet" type="text/css" href="lib/w3.css" />
+<link rel="stylesheet" type="text/css" href="mystyle.css" />
 </head>
 <body>
-<div class="w3-container w3-indigo w3-center w3-animate-top">
+<div class="w3-container w3-indigo w3-center topbar">
 <!-- the title must be dynamic -->
 	<h1>Machine Reservations - New reservation</h1>
 </div>
+<div class="placeholder">i am not visible</div>
 <div class="w3-sidenav w3-light-blue w3-card-8 w3-animate-left" style="width:25%">
 	<?php
     sidenavPrint();
   ?> 
 </div>
-<div class="w3-animate-right" style="margin-left:25%">
+<div class="w3-animate-right w3-padding-medium" style="margin-left:25%">
+<h1 class="w3-red"><noscript>warning: Javascript is disabled, some functions may not work</noscript></h1>
 <?php
   if($_REQUEST["type"] === "add") {
     echo "added reservation with start time: $start_time duration: $reservation->duration machine: $reservation->machine";
