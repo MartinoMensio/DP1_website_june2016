@@ -64,7 +64,7 @@ function listUserReservations($conn) {
 		die("impossible to list the reservations");
 	}
 	if($result->num_rows == 0) {
-		die("no data is stored");
+		die('<h3>You have no reservations</h3>');
 	}
 	echo '<table class="w3-table w3-bordered w3-striped">';
 	echo '<tr><th>Starting time</th><th>Ending time</th><th>Duration (minutes)</th><th>Selected machine</th></tr>';
