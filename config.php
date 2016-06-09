@@ -21,7 +21,7 @@ function checkCookies() {
 	if(count($_COOKIE) > 0){
 		// ok
 	} else {
-		die('<h1>you must enable cookies to view this site</h1>');
+		die('<h1 style="color:#fff;background-color:#f44336">you must enable cookies to view this site</h1>');
 	}
 
 }
