@@ -201,8 +201,12 @@ function insertNewReservation($conn, $duration, $starting_minute, $starting_hour
 		// no machine is free
 		goToWithError('new_reservation.php','no machine is free in this time slot');
 	}
+
+	$curTime = date('H:i:s');
+	$pieces = explode(":", $curTime);
+	$reservation_time = ($pieces[0] * 60 + $pieces[1]) * 60 + $pieces[2];
 	
-	$result = $conn->query("INSERT INTO reservations(starting_hour, starting_minute, ending_hour, ending_minute, machine, user_id) VALUES($starting_hour, $starting_minute, $ending_hour, $ending_minute, $machine, ".$_SESSION["user_id"].")");
+	$result = $conn->query("INSERT INTO reservations(reservation_time, starting_hour, starting_minute, ending_hour, ending_minute, machine, user_id) VALUES($reservation_time, $starting_hour, $starting_minute, $ending_hour, $ending_minute, $machine, ".$_SESSION["user_id"].")");
 	if(!$result) {
 		goToWithError('new_reservation.php','impossible to insert the reservation');
 	}
@@ -222,7 +226,7 @@ function insertNewReservation($conn, $duration, $starting_minute, $starting_hour
 }
 
 function removeReservation($conn, $id) {
-	$result = $conn->query("SELECT starting_hour, starting_minute FROM reservations WHERE id = $id FOR UPDATE");
+	$result = $conn->query("SELECT reservation_time FROM reservations WHERE id = $id FOR UPDATE");
 	if(!$result) {
 		goToWithError('list_user_reservations.php','error in query');
 	}
@@ -233,18 +237,14 @@ function removeReservation($conn, $id) {
 		goToWithError('list_user_reservations.php','error fetching object');
 	}
 	$result->close();
-	$curTime = date('H:i');
+	$curTime = date('H:i:s');
 	$pieces = explode(":", $curTime);
-	$timeAfterStart = ($pieces[0] - $row->starting_hour)*60 + $pieces[1] - $row->starting_minute;
-	//echo "time: $curTime";
-	//echo "$starting_hour:$starting_minute";
-	//echo $timeBeforeStart;
-	//die();
-	if ($timeAfterStart < 1) {
-		goToWithError('list_user_reservations.php', 'In order to delete a reservation, at least 1 minute has to pass since the start time');
+	$time_now = ($pieces[0] * 60 + $pieces[1]) * 60 + $pieces[2];
+	$timeAfterReservation = $time_now - $row->reservation_time;
+	// check if at least 60 seconds have passed since the reservation submission
+	if ($timeAfterReservation < 60) {
+		goToWithError('list_user_reservations.php', 'In order to delete a reservation, at least 1 minute has to pass since the reservation submission');
 	}
-	// clean up $stmt
-	unset($stmt);
 	
 	
 	$result = $conn->query("DELETE FROM reservations WHERE id = $id");

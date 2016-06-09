@@ -13,6 +13,7 @@ CREATE TABLE `users` (
 
 CREATE TABLE `reservations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `reservation_time` int(11) NOT NULL, -- seconds after 00:00:00
   `starting_hour` int(11) NOT NULL,
   `starting_minute` int(11) NOT NULL,
   `ending_hour` int(11) NOT NULL,
