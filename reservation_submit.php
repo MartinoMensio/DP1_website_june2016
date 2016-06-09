@@ -58,13 +58,15 @@
 </div>
 <div class="w3-animate-right w3-padding-medium" style="margin-left:25%">
 <h1 class="w3-red"><noscript>warning: Javascript is disabled, some functions may not work</noscript></h1>
+<h2>
 <?php
   if($_REQUEST["type"] === "add") {
-    echo "added reservation with start time: $start_time duration: $reservation->duration machine: $reservation->machine";
+    echo "added reservation beginning at: $start_time duration: $reservation->duration minutes on machine: $reservation->machine";
   } else if($_REQUEST["type"] === "remove") {
     echo "deleted reservation";
   }
 ?>
+</h2>
 </div>
 </body>
 </html>
