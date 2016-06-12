@@ -48,7 +48,7 @@
   <table>
   <tr><td>Duration (minutes):</td><td><input type="number" min="0" max="1439" required="required" name="duration" placeholder="duration in minutes" /></td></tr>
   <!-- input type="time" is not supported by firefox and IE (supported by Microsoft Edge), so i leave a placeholder for the format -->
-  <tr><td>Start time:</td><td><input type="time" required="required" name="start_time" placeholder="hh:mm" pattern="[0-9]{1,2}:[0-9{1,2}]" title="hh:mm"/></td></tr>
+  <tr><td>Start time:</td><td><input type="time" required="required" name="start_time" placeholder="hh:mm" pattern="[0-9]{1,2}:[0-9]{1,2}" title="hh:mm"/></td></tr>
   </table>
   <input class="w3-btn w3-indigo" type="submit" value="create reservation" />
 </form>

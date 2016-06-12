@@ -18,6 +18,8 @@
     }
     $starting_minute = $pieces[1];
     $starting_hour = $pieces[0];
+    $start_time = sprintf("%02d:%02d", $pieces[0], $pieces[1]);
+    //die($start_time);
     if ($starting_hour < 0 || $starting_hour > 23 || $starting_minute < 0 || $starting_minute > 59) {
       goToWithError('new_reservation.php', 'Invalid starting hour');
     }
