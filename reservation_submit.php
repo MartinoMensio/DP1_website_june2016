@@ -3,8 +3,7 @@
     // this page requires authentication
   checkAuthentication(true);
   if(!isset($_REQUEST["type"])) {
-    header('Location: ' . 'new_reservation.php');
-    die();
+    goToWithError('new_reservation.php', 'Invalid request');
   }
   // Connect to database.
   $conn = connectToDb();
@@ -35,8 +34,7 @@
     $id = $_REQUEST["id"];
     removeReservation($conn, $id);
   } else {
-    header('Location: '.'new_reservation.php?error');
-    die();
+    goToWithError('new_reservation.php', 'Invalid request');
   }  
   
 ?>

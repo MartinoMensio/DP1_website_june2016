@@ -2,8 +2,7 @@
   session_start();
   require 'functions.php';
   if(!isset($_POST["type"])) {
-    header('Location: ' . $loginPage);
-    die();
+    goToDestination($loginPage);
   }
   $conn = connectToDb();
   if($_POST["type"] === "login") {
@@ -32,8 +31,7 @@
     //var_dump($password);
     signup($conn, $name, $surname, $email, $password);
   } else {
-    header('Location: ' . $loginPage);
-    die();
+    goToDestination($loginPage);
   }
 
 ?>

@@ -48,8 +48,8 @@ function listAllReservations($conn) {
 	if($result->num_rows == 0) {
 		die("no data is stored");
 	}
-	echo '<table class="w3-table w3-bordered w3-striped">';
-	echo '<tr><th>Starting time</th><th>Ending time</th><th>Duration (minutes)</th><th>Selected machine</th></tr>';
+	echo '<table class="w3-table w3-bordered w3-striped w3-centered">';
+	echo '<tr class="w3-blue"><th>Starting time</th><th>Ending time</th><th>Duration (minutes)</th><th>Selected machine</th></tr>';
 	while($row = $result->fetch_object()) {
 		$duration = $row->ending_hour*60 + $row->ending_minute -$row->starting_hour*60 - $row->starting_minute;
 		echo "<tr><td>".sprintf("%02d:%02d",$row->starting_hour, $row->starting_minute)."</td><td>".sprintf("%02d:%02d",$row->ending_hour, $row->ending_minute)."</td><td>".$duration."</td><td>".$row->machine."</td></tr>";
@@ -66,8 +66,8 @@ function listUserReservations($conn) {
 	if($result->num_rows == 0) {
 		die('<h3>You have no reservations</h3>');
 	}
-	echo '<table class="w3-table w3-bordered w3-striped">';
-	echo '<tr><th>Starting time</th><th>Ending time</th><th>Duration (minutes)</th><th>Selected machine</th></tr>';
+	echo '<table class="w3-table w3-bordered w3-striped w3-centered">';
+	echo '<tr class="w3-blue"><th>Starting time</th><th>Ending time</th><th>Duration (minutes)</th><th>Selected machine</th><th></th></tr>';
 	while($row = $result->fetch_object()) {
 		$duration = $row->ending_hour*60 + $row->ending_minute -$row->starting_hour*60 - $row->starting_minute;
 		echo "<tr><td>".sprintf("%02d:%02d",$row->starting_hour, $row->starting_minute)."</td><td>".sprintf("%02d:%02d",$row->ending_hour, $row->ending_minute)."</td><td>".$duration."</td><td>".$row->machine.'</td><td><button class="w3-btn w3-indigo" type="button" onclick="remove_reservation('.$row->id.')">Remove</button></td></tr>';

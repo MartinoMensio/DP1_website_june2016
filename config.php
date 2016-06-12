@@ -5,6 +5,7 @@ ini_set('display_errors', 1);
 // force HTTPS
 if(empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] != 'on') {
 	header('Location: https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'], TRUE, 301);
+	die();
 }
 
 function checkCookies() {
@@ -17,6 +18,7 @@ function checkCookies() {
 			// this is the only argument
 			header('Location: https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . "?cookies", TRUE, 301);
 		}
+		die();
 	}
 	if(count($_COOKIE) > 0){
 		// ok
