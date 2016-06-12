@@ -45,10 +45,11 @@ if ($database === "local") {
 	$pwd = "";
 	$db = "machines_reservation";
 } else if($database === "azure") {
-	$host = "us-cdbr-azure-west-c.cloudapp.net";
-	$user = "b411bdc8084ca4";
-	$pwd = "fdd4ffbb";
-	$db = "dp-web-jun16-martinomensio";
+	require '../db_credentials.php';
+	$host = $azure_host;
+	$user = $azure_user;
+	$pwd = $azure_pwd;
+	$db = $azure_db;
 } else {
 	$host = "localhost";
 	$user = "s232297";
