@@ -43,6 +43,7 @@
   }
 ?>
 </h2>
+<a class="w3-btn w3-indigo" href="list_user_reservations.php">Go to my reservations</a>
 </div>
 </body>
 </html>
