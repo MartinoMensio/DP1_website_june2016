@@ -46,16 +46,17 @@ function listAllReservations($conn) {
 		die("impossible to list the reservations");
 	}
 	if($result->num_rows == 0) {
-		die("no data is stored");
+		echo '<h3>There are no reservations stored</h3>';
+	} else {
+		echo '<table class="w3-table w3-bordered w3-striped w3-centered">';
+		echo '<tr class="w3-blue"><th>Starting time</th><th>Ending time</th><th>Duration (minutes)</th><th>Selected machine</th></tr>';
+		while($row = $result->fetch_object()) {
+			$duration = $row->ending_hour*60 + $row->ending_minute -$row->starting_hour*60 - $row->starting_minute;
+			echo "<tr><td>".sprintf("%02d:%02d",$row->starting_hour, $row->starting_minute)."</td><td>".sprintf("%02d:%02d",$row->ending_hour, $row->ending_minute)."</td><td>".$duration."</td><td>".$row->machine."</td></tr>";
+		}
+		$result->close();
+		echo '</table>';
 	}
-	echo '<table class="w3-table w3-bordered w3-striped w3-centered">';
-	echo '<tr class="w3-blue"><th>Starting time</th><th>Ending time</th><th>Duration (minutes)</th><th>Selected machine</th></tr>';
-	while($row = $result->fetch_object()) {
-		$duration = $row->ending_hour*60 + $row->ending_minute -$row->starting_hour*60 - $row->starting_minute;
-		echo "<tr><td>".sprintf("%02d:%02d",$row->starting_hour, $row->starting_minute)."</td><td>".sprintf("%02d:%02d",$row->ending_hour, $row->ending_minute)."</td><td>".$duration."</td><td>".$row->machine."</td></tr>";
-	}
-	$result->close();
-	echo '</table>';
 }
 
 function listUserReservations($conn) {
