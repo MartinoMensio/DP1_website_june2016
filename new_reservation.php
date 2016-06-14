@@ -46,7 +46,7 @@
 <form action="reservation_submit.php" method="post">
   <input type="text" value="add" hidden="hidden" name="type" />
   <table>
-  <tr><td>Duration (minutes):</td><td><input type="number" min="0" max="1439" required="required" name="duration" placeholder="duration in minutes" /></td></tr>
+  <tr><td>Duration (minutes):</td><td><input type="number" min="1" max="1439" required="required" name="duration" placeholder="duration in minutes" /></td></tr>
   <!-- input type="time" is not supported by firefox and IE (supported by Microsoft Edge), so i leave a placeholder for the format -->
   <tr><td>Start time:</td><td><input type="time" required="required" name="start_time" placeholder="hh:mm" pattern="[0-9]{1,2}:[0-9]{1,2}" title="hh:mm"/></td></tr>
   </table>
