@@ -93,11 +93,25 @@ function sidenavPrint() {
 	}
 }
 
+function getCurrentScriptFileName() {
+	return basename($_SERVER["SCRIPT_FILENAME"]);
+}
+
+function getRedirectionPageSuccess() {
+	global $redirections;
+	return $redirections[getCurrentScriptFileName()]['success'];
+}
+
+function getRedirectionPageError() {
+	global $redirections;
+	return $redirections[getCurrentScriptFileName()]['error'];
+}
+
 function getRequiredPostArgument($conn, $name, $escape = true) {
 	global $loginPage;
 	//var_dump($_POST[$name]);
-	if(!isset($_POST[$name])) {
-		header('Location: '.$loginPage);
+	if(!isset($_POST[$name]) || $_POST[$name] === '') {
+		goToWithError("missing required data: $name");
 		die();
 	}
 	if ($escape) {
@@ -112,26 +126,26 @@ function getRequiredPostArgument($conn, $name, $escape = true) {
 	return $result;
 }
 
-function goToWithError($destination, $error) {
-	header("Location: $destination?error=$error");
+function goToWithError($error) {
+	header("Location: ".getRedirectionPageError()."?error=$error");
 	die();
 }
 
-function goToDestination($destination) {
-	header("Location: $destination");
+function goToDestination() {
+	header("Location:".getRedirectionPageSuccess());
 	die();
 }
 
 function login($conn, $email, $password) {
 	$result = $conn->query("SELECT name, surname, id FROM users WHERE email = '$email' AND password = '$password'");
 	if(!$result) {
-		goToWithError('login.php',"impossible to create the query");
+		goToWithError('impossible to create the query');
 	}
 	if($result->num_rows == 0) {
-		goToWithError('login.php','Wrong credentials');
+		goToWithError('Wrong credentials');
 	}
 	if(!($row = $result->fetch_object())) {
-		goToWithError('login.php','Error fetching the result');
+		goToWithError('Error fetching the result');
 	}
 	$result->close();
   $_SESSION['timeout'] = time();
@@ -141,18 +155,18 @@ function login($conn, $email, $password) {
   $_SESSION['password'] = $password;
   $_SESSION['user_id'] = $row->id;
   //var_dump($_SESSION);
-  goToDestination('index.php');
+  goToDestination();
 }
 
 function signup($conn, $name, $surname, $email, $password) {
 	$result = $conn->query("INSERT INTO users(name, surname, email, password) VALUES('$name', '$surname', '$email', '$password')");
 	if(!$result) {
-		goToWithError('login.php', 'impossible to create the account. Maybe the email was already used');
+		goToWithError('impossible to create the account. Maybe the email was already used');
 	}
 	// the id of the last inserted value
 	$id = $conn->insert_id;
 	if(!$conn->commit()) {
-		goToWithError('login.php', 'commit');
+		goToWithError('commit');
 	}
   $_SESSION['timeout'] = time();
   $_SESSION['name'] = $name;
@@ -161,7 +175,7 @@ function signup($conn, $name, $surname, $email, $password) {
   $_SESSION['password'] = $password;
   $_SESSION['user_id'] = $id;
   //var_dump($_SESSION);
-  goToDestination('index.php');
+  goToDestination();
 }
 
 function insertNewReservation($conn, $duration, $starting_minute, $starting_hour) {
@@ -183,7 +197,7 @@ function insertNewReservation($conn, $duration, $starting_minute, $starting_hour
 	}
 	$result = $conn->query("SELECT machine FROM reservations WHERE starting_hour*60+starting_minute < $ending_time AND ending_hour*60+ending_minute > $starting_time FOR UPDATE");
 	if(!$result) {
-		goToWithError('new_reservation.php','error in the query');
+		goToWithError('error in the query');
 	}
 	while ($row = $result->fetch_object()) {
 		$machines[$row->machine] = false;
@@ -201,7 +215,7 @@ function insertNewReservation($conn, $duration, $starting_minute, $starting_hour
 	
 	if($machine == -1) {
 		// no machine is free
-		goToWithError('new_reservation.php','no machine is free in this time slot');
+		goToWithError('no machine is free in this time slot');
 	}
 
 	$curTime = date('H:i:s');
@@ -210,12 +224,12 @@ function insertNewReservation($conn, $duration, $starting_minute, $starting_hour
 	
 	$result = $conn->query("INSERT INTO reservations(reservation_time, starting_hour, starting_minute, ending_hour, ending_minute, machine, user_id) VALUES($reservation_time, $starting_hour, $starting_minute, $ending_hour, $ending_minute, $machine, ".$_SESSION["user_id"].")");
 	if(!$result) {
-		goToWithError('new_reservation.php','impossible to insert the reservation');
+		goToWithError('impossible to insert the reservation');
 	}
 	// the id of the last inserted value
 	$id = $conn->insert_id;
 	if(!$conn->commit()) {
-		goToWithError('new_reservation.php','commit');
+		goToWithError('commit');
 	}
 	$reservation->duration = $duration;
 	$reservation->starting_minute = $starting_minute;
@@ -230,18 +244,18 @@ function insertNewReservation($conn, $duration, $starting_minute, $starting_hour
 function removeReservation($conn, $id) {
 	$result = $conn->query("SELECT reservation_time, user_id FROM reservations WHERE id = $id FOR UPDATE");
 	if(!$result) {
-		goToWithError('list_user_reservations.php','error in query');
+		goToWithError('error in query');
 	}
 	if($result->num_rows == 0) {
-		goToWithError('list_user_reservations.php','reservation not found. Impossible to delete it');
+		goToWithError('reservation not found. Impossible to delete it');
 	}
 	if(!($row = $result->fetch_object())) {
-		goToWithError('list_user_reservations.php','error fetching object');
+		goToWithError('error fetching object');
 	}
 	$result->close();
 
 	if ($row->user_id != $_SESSION["user_id"]) {
-		goToWithError('list_user_reservations.php', 'You tried to delete a reservation that was created by another user!');
+		goToWithError('You tried to delete a reservation that was created by another user!');
 	}
 
 	$curTime = date('H:i:s');
@@ -253,16 +267,16 @@ function removeReservation($conn, $id) {
 	// in this way i block the deletion only in the minute after the creation
 	// the requirements say that we don't have to consider days
 	if ($timeAfterReservation < 60 && $timeAfterReservation >= 0) {
-		goToWithError('list_user_reservations.php', 'In order to delete a reservation, at least 1 minute has to pass since the reservation submission');
+		goToWithError('In order to delete a reservation, at least 1 minute has to pass since the reservation submission');
 	}
 	
 	
 	$result = $conn->query("DELETE FROM reservations WHERE id = $id");
 	if(!$result) {
-		goToWithError('list_user_reservations.php','impossible to delete, consistency may be lost');
+		goToWithError('impossible to delete, consistency may be lost');
 	}
 	if(!$conn->commit()) {
-		goToWithError('list_user_reservations.php','commit');
+		goToWithError('commit');
 	}
 	return;
 }

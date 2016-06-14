@@ -37,6 +37,22 @@ $numberOfMachines = 4;
 
 $loginPage = "login.php";
 
+// this array stores a couple of pages: success and error
+$redirections = array(
+	'login_validate.php' => array(
+		'success' => 'index.php',
+		'error' => 'login.php'
+	),
+	'reservation_submit.php' => array(
+		'success' => '', // stay on the same page
+		'error' => 'new_reservation.php'
+	),
+	'reservation_delete.php' => array(
+		'success' => '', // stay on the same page
+		'error' => 'list_user_reservations.php'
+	)
+);
+
 // check which db to use
 $database = "azure";
 if ($database === "local") {

@@ -3,38 +3,51 @@
     // this page requires authentication
   checkAuthentication(true);
   if(!isset($_REQUEST["type"])) {
-    goToWithError('new_reservation.php', 'Invalid request');
+    goToWithError('Invalid request');
   }
   // Connect to database.
   $conn = connectToDb();
   if($_REQUEST["type"] === "add") {
     $duration = getRequiredPostArgument($conn, "duration");
     $start_time = getRequiredPostArgument($conn, "start_time");
-    // TODO check values of duration and start time
+    if(filter_var($duration, FILTER_VALIDATE_INT) === FALSE) {
+      goToWithError('Duration must be an integer');
+    }
+    if($duration <= 0 || $duration >= 60*24) {
+      goToWithError('Duration must be between 0 and 1440 (bounds not included)');
+    }
     $pieces = explode(":", $start_time);
     if (count($pieces) != 2) {
-      goToWithError('new_reservation.php', 'Invalid format for starting hour');
+      goToWithError('Invalid format for starting hour');
     }
     $starting_minute = $pieces[1];
     $starting_hour = $pieces[0];
+    if(filter_var($starting_minute, FILTER_VALIDATE_INT) === FALSE) {
+      goToWithError('Minutes of starting time must be integer');
+    }
+    if($starting_minute < 0 || $starting_minute >= 60) {
+      goToWithError('Minutes of starting time have an invalid value');
+    }
+    if(filter_var($starting_hour, FILTER_VALIDATE_INT) === FALSE) {
+      goToWithError('Hours of starting time must be integer');
+    }
+    if($starting_minute < 0 || $starting_minute >= 24) {
+      goToWithError('Hours of starting time have an invalid value');
+    }
     $start_time = sprintf("%02d:%02d", $pieces[0], $pieces[1]);
     //die($start_time);
     if ($starting_hour < 0 || $starting_hour > 23 || $starting_minute < 0 || $starting_minute > 59) {
-      goToWithError('new_reservation.php', 'Invalid starting hour');
+      goToWithError('Invalid starting hour');
     }
     if ($duration < 0 || $duration > 60 * 24 - 1) {
-      goToWithError('new_reservation.php', 'Invalid duration');
+      goToWithError('Invalid duration');
     }
     if ($starting_hour * 60 + $starting_minute + $duration > 60*24 - 1) {
-      goToWithError('new_reservation.php', 'The reservation finishes the next day');
+      goToWithError('The reservation finishes the next day');
     }
     $reservation = insertNewReservation($conn, $duration, $starting_minute, $starting_hour);
-  } else if($_REQUEST["type"] === "remove") {
-    //echo 'you want to remove id ='.$_REQUEST["id"];
-    $id = $_REQUEST["id"];
-    removeReservation($conn, $id);
   } else {
-    goToWithError('new_reservation.php', 'Invalid request');
+    goToWithError('Invalid request');
   }  
   
 ?>
@@ -62,8 +75,6 @@
 <?php
   if($_REQUEST["type"] === "add") {
     echo "added reservation beginning at: $start_time duration: $reservation->duration minutes on machine: $reservation->machine";
-  } else if($_REQUEST["type"] === "remove") {
-    echo "deleted reservation";
   }
 ?>
 </h2>
