@@ -110,8 +110,8 @@ function getRedirectionPageError() {
 function getRequiredPostArgument($conn, $name, $escape = true) {
 	global $loginPage;
 	//var_dump($_POST[$name]);
-	if(!isset($_POST[$name])) {
-		header('Location: '.$loginPage);
+	if(!isset($_POST[$name]) || $_POST[$name] === '') {
+		goToWithError("missing required data: $name");
 		die();
 	}
 	if ($escape) {
