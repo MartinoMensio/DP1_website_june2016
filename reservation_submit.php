@@ -22,13 +22,15 @@
     }
     $starting_minute = $pieces[1];
     $starting_hour = $pieces[0];
-    if(filter_var($starting_minute, FILTER_VALIDATE_INT) === FALSE) {
+    // starting minute can be "05", FILTER_VALIDATE_INT rejects it
+    if(ctype_digit($starting_minute) === FALSE) {
       goToWithError('Minutes of starting time must be integer');
     }
     if($starting_minute < 0 || $starting_minute >= 60) {
       goToWithError('Minutes of starting time have an invalid value');
     }
-    if(filter_var($starting_hour, FILTER_VALIDATE_INT) === FALSE) {
+    // starting hour can be "05", FILTER_VALIDATE_INT rejects it
+    if(ctype_digit($starting_hour) === FALSE) {
       goToWithError('Hours of starting time must be integer');
     }
     if($starting_minute < 0 || $starting_minute >= 24) {
