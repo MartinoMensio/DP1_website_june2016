@@ -20,13 +20,13 @@
     // TODO password must not be escaped, because it can be weakened
     $password = sha1(getRequiredPostArgument($conn, "password", false));
     if(strlen($name) > 50) {
-      goToWithError($loginPage, 'Name too long');
+      goToWithError('Name too long');
     }
     if(strlen($surname) > 50) {
-      goToWithError($loginPage, 'Surname too long');
+      goToWithError('Surname too long');
     }
     if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-      goToWithError($loginPage, 'Invalid email');
+      goToWithError('Invalid email');
     }
     //var_dump($password);
     signup($conn, $name, $surname, $email, $password);

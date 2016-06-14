@@ -49,7 +49,7 @@
 </div>
 <script type="text/javascript">
 function remove_reservation(id) {
-  location = "reservation_submit.php?type=remove&id="+id;
+  location = "reservation_delete.php?type=remove&id="+id;
 }
 function hideError() {
   document.getElementById('error').className = 'hidden';
