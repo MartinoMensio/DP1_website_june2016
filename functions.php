@@ -64,16 +64,17 @@ function listUserReservations($conn) {
 		die("impossible to list the reservations");
 	}
 	if($result->num_rows == 0) {
-		die('<h3>You have no reservations</h3>');
+		echo '<h3>You have no reservations</h3>';
+	} else {
+		echo '<table class="w3-table w3-bordered w3-striped w3-centered">';
+		echo '<tr class="w3-blue"><th>Starting time</th><th>Ending time</th><th>Duration (minutes)</th><th>Selected machine</th><th></th></tr>';
+		while($row = $result->fetch_object()) {
+			$duration = $row->ending_hour*60 + $row->ending_minute -$row->starting_hour*60 - $row->starting_minute;
+			echo "<tr><td>".sprintf("%02d:%02d",$row->starting_hour, $row->starting_minute)."</td><td>".sprintf("%02d:%02d",$row->ending_hour, $row->ending_minute)."</td><td>".$duration."</td><td>".$row->machine.'</td><td><button class="w3-btn w3-indigo" type="button" onclick="remove_reservation('.$row->id.')">Remove</button></td></tr>';
+		}
+		$result->close();
+		echo '</table>';
 	}
-	echo '<table class="w3-table w3-bordered w3-striped w3-centered">';
-	echo '<tr class="w3-blue"><th>Starting time</th><th>Ending time</th><th>Duration (minutes)</th><th>Selected machine</th><th></th></tr>';
-	while($row = $result->fetch_object()) {
-		$duration = $row->ending_hour*60 + $row->ending_minute -$row->starting_hour*60 - $row->starting_minute;
-		echo "<tr><td>".sprintf("%02d:%02d",$row->starting_hour, $row->starting_minute)."</td><td>".sprintf("%02d:%02d",$row->ending_hour, $row->ending_minute)."</td><td>".$duration."</td><td>".$row->machine.'</td><td><button class="w3-btn w3-indigo" type="button" onclick="remove_reservation('.$row->id.')">Remove</button></td></tr>';
-	}
-	$result->close();
-	echo '</table>';
 }
 
 function sidenavPrint() {
@@ -226,7 +227,7 @@ function insertNewReservation($conn, $duration, $starting_minute, $starting_hour
 }
 
 function removeReservation($conn, $id) {
-	$result = $conn->query("SELECT reservation_time FROM reservations WHERE id = $id FOR UPDATE");
+	$result = $conn->query("SELECT reservation_time, user_id FROM reservations WHERE id = $id FOR UPDATE");
 	if(!$result) {
 		goToWithError('list_user_reservations.php','error in query');
 	}
@@ -237,6 +238,11 @@ function removeReservation($conn, $id) {
 		goToWithError('list_user_reservations.php','error fetching object');
 	}
 	$result->close();
+
+	if ($row->user_id != $_SESSION["user_id"]) {
+		goToWithError('list_user_reservations.php', 'You tried to delete a reservation that was created by another user!');
+	}
+
 	$curTime = date('H:i:s');
 	$pieces = explode(":", $curTime);
 	$time_now = ($pieces[0] * 60 + $pieces[1]) * 60 + $pieces[2];
