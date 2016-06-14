@@ -249,7 +249,10 @@ function removeReservation($conn, $id) {
 	$time_now = ($pieces[0] * 60 + $pieces[1]) * 60 + $pieces[2];
 	$timeAfterReservation = $time_now - $row->reservation_time;
 	// check if at least 60 seconds have passed since the reservation submission
-	if ($timeAfterReservation < 60) {
+	// a negative time means that it has been created in another day, so i let the deletion to happen
+	// in this way i block the deletion only in the minute after the creation
+	// the requirements say that we don't have to consider days
+	if ($timeAfterReservation < 60 && $timeAfterReservation >= 0) {
 		goToWithError('list_user_reservations.php', 'In order to delete a reservation, at least 1 minute has to pass since the reservation submission');
 	}
 	
