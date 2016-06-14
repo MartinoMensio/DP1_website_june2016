@@ -11,14 +11,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Machine reservation - Personal</title>
+<title>Machine reservation - My reservations</title>
 <link rel="stylesheet" type="text/css" href="lib/w3.css" />
 <link rel="stylesheet" type="text/css" href="mystyle.css" />
 </head>
 <body>
 <div class="w3-container w3-indigo w3-center topbar">
 <!-- the title must be dynamic -->
-	<h1>Machine Reservations - Personal</h1>
+	<h1>Machine Reservations - My reservations</h1>
 </div>
 <div class="placeholder">i am not visible</div>
 <div class="w3-sidenav w3-light-blue w3-card-8 w3-animate-left" style="width:25%">
