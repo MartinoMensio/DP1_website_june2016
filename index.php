@@ -15,11 +15,11 @@
 </head>
 <body>
 <div class="w3-container w3-indigo w3-center topbar">
-	<h1>Machine Reservations</h1>
+  <h1>Machine Reservations</h1>
 </div>
 <div class="placeholder">i am not visible</div>
 <div class="w3-sidenav w3-light-blue w3-card-8 w3-animate-left" style="width:25%">
-	<?php
+  <?php
     sidenavPrint();
   ?> 
 </div>
