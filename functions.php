@@ -32,7 +32,7 @@ function connectToDb() {
   global $host, $user, $pwd, $db;
   $conn = new mysqli($host, $user, $pwd, $db);
   if(!$conn) {
-    die("impossible to connect to database");
+    die('impossible to connect to database');
   }
   // the db credentials are not more needed. For security reasons, i unset them
   unset($host);
@@ -45,9 +45,9 @@ function connectToDb() {
 
 // this function is called to display all the reservations
 function listAllReservations($conn) {
-  $result = $conn->query("SELECT * FROM reservations ORDER BY starting_hour, starting_minute");
+  $result = $conn->query('SELECT * FROM reservations ORDER BY starting_hour, starting_minute');
   if(!$result) {
-    die("impossible to list the reservations");
+    die('impossible to list the reservations');
   }
   if($result->num_rows == 0) {
     echo '<h3>There are no reservations stored</h3>';
@@ -57,7 +57,7 @@ function listAllReservations($conn) {
     while($row = $result->fetch_object()) {
       // compute the duration
       $duration = $row->ending_hour*60 + $row->ending_minute -$row->starting_hour*60 - $row->starting_minute;
-      echo "<tr><td>".sprintf("%02d:%02d",$row->starting_hour, $row->starting_minute)."</td><td>".sprintf("%02d:%02d",$row->ending_hour, $row->ending_minute)."</td><td>".$duration."</td><td>".$row->machine."</td></tr>";
+      echo '<tr><td>'.sprintf("%02d:%02d",$row->starting_hour, $row->starting_minute).'</td><td>'.sprintf("%02d:%02d",$row->ending_hour, $row->ending_minute).'</td><td>'.$duration.'</td><td>'.$row->machine.'</td></tr>';
     }
     $result->close();
     echo '</table>';
@@ -67,9 +67,9 @@ function listAllReservations($conn) {
 // this function is called to display the current user reservations
 function listUserReservations($conn) {
   // the user id is stored in the session array
-  $result = $conn->query("SELECT * FROM reservations WHERE user_id =".$_SESSION["user_id"]." ORDER BY starting_hour, starting_minute");
+  $result = $conn->query('SELECT * FROM reservations WHERE user_id ='.$_SESSION['user_id'].' ORDER BY starting_hour, starting_minute');
   if(!$result) {
-    die("impossible to list the reservations");
+    die('impossible to list the reservations');
   }
   if($result->num_rows == 0) {
     echo '<h3>You have no reservations</h3>';
@@ -78,7 +78,7 @@ function listUserReservations($conn) {
     echo '<tr class="w3-blue"><th>Starting time</th><th>Ending time</th><th>Duration (minutes)</th><th>Selected machine</th><th></th></tr>';
     while($row = $result->fetch_object()) {
       $duration = $row->ending_hour*60 + $row->ending_minute -$row->starting_hour*60 - $row->starting_minute;
-      echo "<tr><td>".sprintf("%02d:%02d",$row->starting_hour, $row->starting_minute)."</td><td>".sprintf("%02d:%02d",$row->ending_hour, $row->ending_minute)."</td><td>".$duration."</td><td>".$row->machine.'</td><td><button class="w3-btn w3-indigo" type="button" onclick="remove_reservation('.$row->id.')">Remove</button></td></tr>';
+      echo '<tr><td>'.sprintf("%02d:%02d",$row->starting_hour, $row->starting_minute).'</td><td>'.sprintf("%02d:%02d",$row->ending_hour, $row->ending_minute).'</td><td>'.$duration.'</td><td>'.$row->machine.'</td><td><button class="w3-btn w3-indigo" type="button" onclick="remove_reservation('.$row->id.')">Remove</button></td></tr>';
     }
     $result->close();
     echo '</table>';
@@ -92,7 +92,7 @@ function sidenavPrint() {
   // look if user is logged in (checked by the checkAuthentication function)
   if($authenticated) {
     // authenticated user
-    echo '<h1 class="w3-padding-medium">Hello '.$_SESSION["name"].'</h1>';
+    echo '<h1 class="w3-padding-medium">Hello '.$_SESSION['name'].'</h1>';
     echo '<a href="profile.php">profile</a>';
     echo '<a href="new_reservation.php">add reservation</a>';
     echo '<a href="list_user_reservations.php">list my reservations</a>';
@@ -105,7 +105,7 @@ function sidenavPrint() {
 
 // on which file am I executing this script?
 function getCurrentScriptFileName() {
-  return basename($_SERVER["SCRIPT_FILENAME"]);
+  return basename($_SERVER['SCRIPT_FILENAME']);
 }
 
 // where should I go on success?
@@ -142,13 +142,13 @@ function getRequiredPostArgument($conn, $name, $escape = true) {
 
 // redirect on corresponding error page
 function goToWithError($error) {
-  header("Location: ".getRedirectionPageError()."?error=$error");
+  header('Location: '.getRedirectionPageError()."?error=$error");
   die();
 }
 
 // redirect on corresponding success page
 function goToDestination() {
-  header("Location:".getRedirectionPageSuccess());
+  header('Location: '.getRedirectionPageSuccess());
   die();
 }
 
@@ -244,11 +244,11 @@ function insertNewReservation($conn, $duration, $starting_minute, $starting_hour
   }
 
   $curTime = date('H:i:s');
-  $pieces = explode(":", $curTime);
+  $pieces = explode(':', $curTime);
   // the reservation time is the number of seconds after 00:00:00
   $reservation_time = ($pieces[0] * 60 + $pieces[1]) * 60 + $pieces[2];
   
-  $result = $conn->query("INSERT INTO reservations(reservation_time, starting_hour, starting_minute, ending_hour, ending_minute, machine, user_id) VALUES($reservation_time, $starting_hour, $starting_minute, $ending_hour, $ending_minute, $machine, ".$_SESSION["user_id"].")");
+  $result = $conn->query("INSERT INTO reservations(reservation_time, starting_hour, starting_minute, ending_hour, ending_minute, machine, user_id) VALUES($reservation_time, $starting_hour, $starting_minute, $ending_hour, $ending_minute, $machine, ".$_SESSION['user_id'].')');
   if(!$result) {
     goToWithError('impossible to insert the reservation');
   }
@@ -281,12 +281,12 @@ function removeReservation($conn, $id) {
   }
   $result->close();
   // check who created this reservation
-  if ($row->user_id != $_SESSION["user_id"]) {
+  if ($row->user_id != $_SESSION['user_id']) {
     goToWithError('You tried to delete a reservation that was created by another user!');
   }
 
   $curTime = date('H:i:s');
-  $pieces = explode(":", $curTime);
+  $pieces = explode(':', $curTime);
   $time_now = ($pieces[0] * 60 + $pieces[1]) * 60 + $pieces[2];
   $timeAfterReservation = $time_now - $row->reservation_time;
   // check if at least 60 seconds have passed since the reservation submission

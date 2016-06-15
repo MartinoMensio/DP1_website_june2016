@@ -16,10 +16,10 @@ function checkCookies() {
   if(!isset($_GET['cookies'])){
     if (sizeof($_GET)) {
       // add a new argument
-      header('Location: https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . "&cookies", TRUE, 301);
+      header('Location: https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . '&cookies', TRUE, 301);
     } else {
       // this is the only argument
-      header('Location: https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . "?cookies", TRUE, 301);
+      header('Location: https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . '?cookies', TRUE, 301);
     }
     die();
   }
@@ -41,8 +41,8 @@ $maxInactiveTime = 60 * 2;
 $numberOfMachines = 4;
 
 // some useful pages to remember
-$loginPage = "login.php";
-$homePage = "index.php";
+$loginPage = 'login.php';
+$homePage = 'index.php';
 
 // this array stores a couple of pages: success and error
 // and is used inside the functions in order to know where to go
@@ -62,7 +62,7 @@ $redirections = array(
 );
 
 // redirect navigation from function pages to homepage
-switch (basename($_SERVER["SCRIPT_FILENAME"])) {
+switch (basename($_SERVER['SCRIPT_FILENAME'])) {
   case 'config.php':
   case 'functions.php':
     header("Location: $homePage");
@@ -73,23 +73,23 @@ switch (basename($_SERVER["SCRIPT_FILENAME"])) {
 }
 
 // check which db to use
-$database = "azure";
-if ($database === "local") {
-  $host = "localhost";
-  $user = "root";
-  $pwd = "";
-  $db = "machines_reservation";
-} else if($database === "azure") {
+$database = 'azure';
+if ($database === 'local') {
+  $host = 'localhost';
+  $user = 'root';
+  $pwd = '';
+  $db = 'machines_reservation';
+} else if($database === 'azure') {
   require '../db_credentials.php';
   $host = $azure_host;
   $user = $azure_user;
   $pwd = $azure_pwd;
   $db = $azure_db;
 } else {
-  $host = "localhost";
-  $user = "s232297";
-  $pwd = "angstshs";
-  $db = "s232297";
+  $host = 'localhost';
+  $user = 's232297';
+  $pwd = 'angstshs';
+  $db = 's232297';
 }
 
 ?>

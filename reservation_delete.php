@@ -6,12 +6,12 @@
   // Connect to database.
   $conn = connectToDb();
 
-  if(!isset($_REQUEST["type"])) {
+  if(!isset($_REQUEST['type'])) {
     goToWithError('Invalid request');
   }
-  if($_REQUEST["type"] === "remove") {
+  if($_REQUEST['type'] === 'remove') {
     // check and validate id
-    $id = $_REQUEST["id"];
+    $id = $_REQUEST['id'];
     if(filter_var($id, FILTER_VALIDATE_INT) === FALSE) {
       goToWithError('Invalid ID specified');
     }
@@ -42,8 +42,8 @@
     <h1 class="w3-red"><noscript>warning: Javascript is disabled, some functions may not work</noscript></h1>
     <h2>
       <?php
-        if($_REQUEST["type"] === "remove") {
-          echo "deleted reservation";
+        if($_REQUEST['type'] === 'remove') {
+          echo 'Deleted reservation';
         }
       ?>
     </h2>

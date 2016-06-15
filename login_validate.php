@@ -1,22 +1,22 @@
 <?php
   session_start();
   require 'functions.php';
-  if(!isset($_POST["type"])) {
+  if(!isset($_POST['type'])) {
     goToWithError('Incorrect request');
   }
   $conn = connectToDb();
-  if($_POST["type"] === "login") {
-    $email = getRequiredPostArgument($conn, "email");
+  if($_POST['type'] === 'login') {
+    $email = getRequiredPostArgument($conn, 'email');
     // password must not be escaped, because it can be weakened
-    $password = sha1(getRequiredPostArgument($conn, "password", false));
+    $password = sha1(getRequiredPostArgument($conn, 'password', false));
     // check the login info from DB
     login($conn, $email, $password);
-  } else if($_POST["type"] === "register") {
-    $name = getRequiredPostArgument($conn, "name");
-    $surname = getRequiredPostArgument($conn, "surname");
-    $email = getRequiredPostArgument($conn, "email");
+  } else if($_POST['type'] === 'register') {
+    $name = getRequiredPostArgument($conn, 'name');
+    $surname = getRequiredPostArgument($conn, 'surname');
+    $email = getRequiredPostArgument($conn, 'email');
     // password must not be escaped, because it can be weakened
-    $password = sha1(getRequiredPostArgument($conn, "password", false));
+    $password = sha1(getRequiredPostArgument($conn, 'password', false));
     // check the parameters
     if(strlen($name) > 50) {
       goToWithError('Name too long');

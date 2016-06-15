@@ -24,8 +24,8 @@
     <div class="w3-row" style="margin-left:25%">
       <h1 class="w3-red"><noscript>warning: Javascript is disabled, some functions may not work</noscript></h1>
       <?php
-        if(isset($_REQUEST["error"])) {
-          $error = $_REQUEST["error"];
+        if(isset($_REQUEST['error'])) {
+          $error = $_REQUEST['error'];
           echo '<div id="error" class="w3-padding-medium"><h2>';
           echo 'Error: '.htmlentities($error);
           echo '</h2>';

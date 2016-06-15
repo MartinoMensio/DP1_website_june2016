@@ -26,8 +26,8 @@
   <div class="w3-animate-right w3-padding-medium" style="margin-left:25%" id="content">
     <h1 class="w3-red"><noscript>warning: Javascript is disabled, some functions may not work</noscript></h1>
     <?php
-      if(isset($_REQUEST["error"])) {
-        $error = $_REQUEST["error"];
+      if(isset($_REQUEST['error'])) {
+        $error = $_REQUEST['error'];
         echo '<div id="error" class="w3-padding-medium"><h2>';
         echo 'Error: '.htmlentities($error);
         echo '</h2>';
