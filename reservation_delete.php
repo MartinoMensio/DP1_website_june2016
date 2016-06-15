@@ -10,6 +10,9 @@
   if($_REQUEST["type"] === "remove") {
     //echo 'you want to remove id ='.$_REQUEST["id"];
     $id = $_REQUEST["id"];
+    if(filter_var($id, FILTER_VALIDATE_INT) === FALSE) {
+      goToWithError('Invalid ID specified');
+    }
     removeReservation($conn, $id);
   } else {
     goToWithError('Invalid request');
