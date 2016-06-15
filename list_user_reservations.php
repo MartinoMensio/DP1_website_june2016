@@ -1,12 +1,10 @@
 <?php
-// main page: not authenticated
   require 'functions.php';
-  
+  // this page requires authentication
   checkAuthentication(true);
 
   // Connect to database.
   $conn = connectToDb();
-  //listAllReservations($conn);
 ?>
 <!DOCTYPE html>
 <html>
@@ -17,7 +15,6 @@
 </head>
 <body>
 <div class="w3-container w3-indigo w3-center topbar">
-<!-- the title must be dynamic -->
 	<h1>Machine Reservations - My reservations</h1>
 </div>
 <div class="placeholder">i am not visible</div>

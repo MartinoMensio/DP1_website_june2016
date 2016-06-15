@@ -8,8 +8,11 @@ if(empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] != 'on') {
 	die();
 }
 
+// check the cookies
 function checkCookies() {
+	// set a test cookie
 	setcookie('test', 1);
+	// if i am not in the test page, redirect to it
 	if(!isset($_GET['cookies'])){
 		if (sizeof($_GET)) {
 			// add a new argument
@@ -27,29 +30,33 @@ function checkCookies() {
 	}
 
 }
-
+// cookie check must be done only if there are no cookies
 if (!isset($_COOKIE['test'])) {
 	checkCookies();
 }
 
+// timeout for inactivity
 $maxInactiveTime = 60 * 2;
+// this is the global variable to be changed that specifies the number of available machines
 $numberOfMachines = 4;
 
+// some useful pages to remember
 $loginPage = "login.php";
 $homePage = "index.php";
 
 // this array stores a couple of pages: success and error
+// and is used inside the functions in order to know where to go
 $redirections = array(
 	'login_validate.php' => array(
 		'success' => 'index.php',
 		'error' => 'login.php'
 	),
 	'reservation_submit.php' => array(
-		'success' => '', // stay on the same page
+		'success' => '', // stay on the same page (not used)
 		'error' => 'new_reservation.php'
 	),
 	'reservation_delete.php' => array(
-		'success' => '', // stay on the same page
+		'success' => '', // stay on the same page (not used)
 		'error' => 'list_user_reservations.php'
 	)
 );

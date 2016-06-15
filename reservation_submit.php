@@ -2,11 +2,12 @@
   require 'functions.php';
     // this page requires authentication
   checkAuthentication(true);
+  // Connect to database.
+  $conn = connectToDb();
+
   if(!isset($_REQUEST["type"])) {
     goToWithError('Invalid request');
   }
-  // Connect to database.
-  $conn = connectToDb();
   if($_REQUEST["type"] === "add") {
     $duration = getRequiredPostArgument($conn, "duration");
     $start_time = getRequiredPostArgument($conn, "start_time");
@@ -16,6 +17,7 @@
     if($duration <= 0 || $duration >= 60*24) {
       goToWithError('Duration must be between 0 and 1440 (bounds not included)');
     }
+    // $start_time is a string in the form "12:05"
     $pieces = explode(":", $start_time);
     if (count($pieces) != 2) {
       goToWithError('Invalid format for starting hour');
@@ -33,11 +35,12 @@
     if(ctype_digit($starting_hour) === FALSE) {
       goToWithError('Hours of starting time must be integer');
     }
-    if($starting_minute < 0 || $starting_minute >= 24) {
+    if($starting_hour < 0 || $starting_hour >= 24) {
       goToWithError('Hours of starting time have an invalid value');
     }
+    // rebuild the string in order to be sure that is not like "1:5" but "01:05"
     $start_time = sprintf("%02d:%02d", $pieces[0], $pieces[1]);
-    //die($start_time);
+
     if ($starting_hour < 0 || $starting_hour > 23 || $starting_minute < 0 || $starting_minute > 59) {
       goToWithError('Invalid starting hour');
     }
@@ -62,7 +65,6 @@
 </head>
 <body>
 <div class="w3-container w3-indigo w3-center topbar">
-<!-- the title must be dynamic -->
 	<h1>Machine Reservations - New reservation</h1>
 </div>
 <div class="placeholder">i am not visible</div>

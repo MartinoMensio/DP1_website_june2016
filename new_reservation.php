@@ -1,5 +1,4 @@
 <?php
-// main page: not authenticated
   require 'functions.php';
   
   // this page requires authentication
@@ -7,7 +6,6 @@
 
   // Connect to database.
   $conn = connectToDb();
-  //listAllReservations($conn);
 ?>
 <!DOCTYPE html>
 <html>
@@ -18,7 +16,6 @@
 </head>
 <body>
 <div class="w3-container w3-indigo w3-center topbar">
-<!-- the title must be dynamic -->
 	<h1>Machine Reservations - New reservation</h1>
 </div>
 <div class="placeholder">i am not visible</div>
@@ -47,7 +44,7 @@
   <input type="text" value="add" hidden="hidden" name="type" />
   <table>
   <tr><td>Duration (minutes):</td><td><input type="number" min="1" max="1439" required="required" name="duration" placeholder="duration in minutes" /></td></tr>
-  <!-- input type="time" is not supported by firefox and IE (supported by Microsoft Edge), so i leave a placeholder for the format -->
+  <!-- input type="time" is not supported by firefox and IE (supported by Microsoft Edge, Chrome), so i leave a placeholder for the format -->
   <tr><td>Start time:</td><td><input type="time" required="required" name="start_time" placeholder="hh:mm" pattern="[0-9]{1,2}:[0-9]{1,2}" title="hh:mm"/></td></tr>
   </table>
   <input class="w3-btn w3-indigo" type="submit" value="create reservation" />

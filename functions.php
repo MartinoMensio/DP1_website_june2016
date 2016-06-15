@@ -3,11 +3,14 @@ require 'config.php';
 
 $authenticated = false;
 
-// chech http://php.net/manual/en/features.http-auth.php
-
+// this function checks if authentication is valid or expired
+// the parameter $redirect is a boolean:
+// - true means that if authentication is not valid, the user must go to login page
+// - false means that for this page authentication is not required
 function checkAuthentication($redirect) {
 	global $maxInactiveTime, $loginPage, $authenticated;
 	session_start();
+	// check the value of the timeout
 	if(!isset($_SESSION['timeout']) || $_SESSION['timeout'] + $maxInactiveTime < time()) {
 		// expired or new session
 		session_unset();
@@ -17,21 +20,21 @@ function checkAuthentication($redirect) {
 			header('Location: ' . $loginPage);
 			die();
 		}
-		//var_dump($_SESSION);
 	} else {
-		// valid session
+		// valid session, update the timeout
 		$_SESSION['timeout'] = time();
 		$authenticated = true;
 	}
 }
 
+// generic function to connect to database disabling autocommit
 function connectToDb() {
 	global $host, $user, $pwd, $db;
 	$conn = new mysqli($host, $user, $pwd, $db);
-	// TODO catch errors of connection
 	if(!$conn) {
 		die("impossible to connect to database");
 	}
+	// the db credentials are not more needed. For security reasons, i unset them
 	unset($host);
 	unset($user);
 	unset($pwd);
@@ -40,6 +43,7 @@ function connectToDb() {
 	return $conn;
 }
 
+// this function is called to display all the reservations
 function listAllReservations($conn) {
 	$result = $conn->query("SELECT * FROM reservations ORDER BY starting_hour, starting_minute");
 	if(!$result) {
@@ -51,6 +55,7 @@ function listAllReservations($conn) {
 		echo '<table class="w3-table w3-bordered w3-striped w3-centered">';
 		echo '<tr class="w3-blue"><th>Starting time</th><th>Ending time</th><th>Duration (minutes)</th><th>Selected machine</th></tr>';
 		while($row = $result->fetch_object()) {
+			// compute the duration
 			$duration = $row->ending_hour*60 + $row->ending_minute -$row->starting_hour*60 - $row->starting_minute;
 			echo "<tr><td>".sprintf("%02d:%02d",$row->starting_hour, $row->starting_minute)."</td><td>".sprintf("%02d:%02d",$row->ending_hour, $row->ending_minute)."</td><td>".$duration."</td><td>".$row->machine."</td></tr>";
 		}
@@ -59,7 +64,9 @@ function listAllReservations($conn) {
 	}
 }
 
+// this function is called to display the current user reservations
 function listUserReservations($conn) {
+	// the user id is stored in the session array
 	$result = $conn->query("SELECT * FROM reservations WHERE user_id =".$_SESSION["user_id"]." ORDER BY starting_hour, starting_minute");
 	if(!$result) {
 		die("impossible to list the reservations");
@@ -78,42 +85,49 @@ function listUserReservations($conn) {
 	}
 }
 
+// print the sidenav that contains some useful links
 function sidenavPrint() {
 	global $authenticated, $loginPage;
 	echo '<a href="index.php">Homepage (all reservations)</a>';
-	// look if user is logged in (checked by a init function)
+	// look if user is logged in (checked by the checkAuthentication function)
 	if($authenticated) {
+		// authenticated user
 		echo '<h1 class="w3-padding-medium">Hello '.$_SESSION["name"].'</h1>';
 		echo '<a href="profile.php">profile</a>';
 		echo '<a href="new_reservation.php">add reservation</a>';
 		echo '<a href="list_user_reservations.php">list my reservations</a>';
 		echo '<a href="logout.php">logout</a>';
 	} else {
+		// not autenthicated user
 		echo "<a href=\"$loginPage\">login or register</a>";
 	}
 }
 
+// on which file am I executing this script?
 function getCurrentScriptFileName() {
 	return basename($_SERVER["SCRIPT_FILENAME"]);
 }
 
+// where should I go on success?
 function getRedirectionPageSuccess() {
 	global $redirections;
 	return $redirections[getCurrentScriptFileName()]['success'];
 }
 
+// where should I go on error?
 function getRedirectionPageError() {
 	global $redirections;
 	return $redirections[getCurrentScriptFileName()]['error'];
 }
 
+// return a sanitized version of a POST argument
 function getRequiredPostArgument($conn, $name, $escape = true) {
-	global $loginPage;
-	//var_dump($_POST[$name]);
+	// check if the argument is present
 	if(!isset($_POST[$name]) || $_POST[$name] === '') {
 		goToWithError("missing required data: $name");
 		die();
 	}
+	// if escape is set to true, also sanitize with htmlentities
 	if ($escape) {
 		$result = $conn->real_escape_string(htmlentities(trim($_POST[$name])));
 	} else {
@@ -126,63 +140,72 @@ function getRequiredPostArgument($conn, $name, $escape = true) {
 	return $result;
 }
 
+// redirect on corresponding error page
 function goToWithError($error) {
 	header("Location: ".getRedirectionPageError()."?error=$error");
 	die();
 }
 
+// redirect on corresponding success page
 function goToDestination() {
 	header("Location:".getRedirectionPageSuccess());
 	die();
 }
 
+// login function
+// email and password are already sanitized and checked by caller
 function login($conn, $email, $password) {
 	$result = $conn->query("SELECT name, surname, id FROM users WHERE email = '$email' AND password = '$password'");
 	if(!$result) {
-		goToWithError('impossible to create the query');
+		goToWithError('Impossible to create the query');
 	}
 	if($result->num_rows == 0) {
+		// both if password wrong or if non-existing account
 		goToWithError('Wrong credentials');
 	}
 	if(!($row = $result->fetch_object())) {
 		goToWithError('Error fetching the result');
 	}
 	$result->close();
+	// save into the session array some useful data
   $_SESSION['timeout'] = time();
   $_SESSION['name'] = $row->name;
   $_SESSION['surname'] = $row->surname;
   $_SESSION['email'] = $email;
   $_SESSION['password'] = $password;
   $_SESSION['user_id'] = $row->id;
-  //var_dump($_SESSION);
+  // and go to the right place
   goToDestination();
 }
 
+// parameters are already sanitized and checked by caller
 function signup($conn, $name, $surname, $email, $password) {
 	$result = $conn->query("INSERT INTO users(name, surname, email, password) VALUES('$name', '$surname', '$email', '$password')");
 	if(!$result) {
-		goToWithError('impossible to create the account. Maybe the email was already used');
+		goToWithError('Impossible to create the account. Maybe the email was already used');
 	}
 	// the id of the last inserted value
 	$id = $conn->insert_id;
 	if(!$conn->commit()) {
-		goToWithError('commit');
+		goToWithError('Impossible to commit. Please try again');
 	}
+	// save into the session array
   $_SESSION['timeout'] = time();
   $_SESSION['name'] = $name;
   $_SESSION['surname'] = $surname;
   $_SESSION['email'] = $email;
   $_SESSION['password'] = $password;
   $_SESSION['user_id'] = $id;
-  //var_dump($_SESSION);
+  // and go to the right place
   goToDestination();
 }
 
+// as for other functions, parameters are sanitized and checked by caller
 function insertNewReservation($conn, $duration, $starting_minute, $starting_hour) {
 	global $numberOfMachines;
-	// values of parameters are checked by caller
-	$reservation = new stdClass();
 	
+	$reservation = new stdClass();
+	// compute the ending time
 	$ending_minute = ($starting_minute + $duration) % 60;
 	$ending_hour = floor(($starting_minute + $duration) / 60) + $starting_hour;
 	
@@ -192,6 +215,7 @@ function insertNewReservation($conn, $duration, $starting_minute, $starting_hour
 	// also if not released explicitly, on rollback (caused by die) the tables are unlocked
 	
 	$machines = array();
+	// initialize array of boolean that say: the machine is available
 	for($i = 0; $i < $numberOfMachines; $i++) {
 		$machines[$i] = true;
 	}
@@ -200,26 +224,28 @@ function insertNewReservation($conn, $duration, $starting_minute, $starting_hour
 		goToWithError('error in the query');
 	}
 	while ($row = $result->fetch_object()) {
+		// this machine is used in this time slot, so i can't use it anymore
 		$machines[$row->machine] = false;
 	}
 	$result->close();
 	$machine = -1;
 	
+	// scan the array to see if some free machines are still there
 	for ($i=0; $i < $numberOfMachines; $i++) { 
 		if ($machines[$i]) {
 			$machine = $i;
 			break;
 		}
 	}
-	//var_dump($machines);
 	
 	if($machine == -1) {
 		// no machine is free
-		goToWithError('no machine is free in this time slot');
+		goToWithError('No machine is free in this time slot');
 	}
 
 	$curTime = date('H:i:s');
 	$pieces = explode(":", $curTime);
+	// the reservation time is the number of seconds after 00:00:00
 	$reservation_time = ($pieces[0] * 60 + $pieces[1]) * 60 + $pieces[2];
 	
 	$result = $conn->query("INSERT INTO reservations(reservation_time, starting_hour, starting_minute, ending_hour, ending_minute, machine, user_id) VALUES($reservation_time, $starting_hour, $starting_minute, $ending_hour, $ending_minute, $machine, ".$_SESSION["user_id"].")");
@@ -241,19 +267,20 @@ function insertNewReservation($conn, $duration, $starting_minute, $starting_hour
 	return $reservation;
 }
 
+// the parameter id is already sanitized and checked by the caller
 function removeReservation($conn, $id) {
 	$result = $conn->query("SELECT reservation_time, user_id FROM reservations WHERE id = $id FOR UPDATE");
 	if(!$result) {
-		goToWithError('error in query');
+		goToWithError('Error in query');
 	}
 	if($result->num_rows == 0) {
-		goToWithError('reservation not found. Impossible to delete it');
+		goToWithError('Reservation not found. Impossible to delete it');
 	}
 	if(!($row = $result->fetch_object())) {
-		goToWithError('error fetching object');
+		goToWithError('Error fetching object');
 	}
 	$result->close();
-
+	// check who created this reservation
 	if ($row->user_id != $_SESSION["user_id"]) {
 		goToWithError('You tried to delete a reservation that was created by another user!');
 	}
@@ -270,7 +297,7 @@ function removeReservation($conn, $id) {
 		goToWithError('In order to delete a reservation, at least 1 minute has to pass since the reservation submission');
 	}
 	
-	
+	// now I can delete it
 	$result = $conn->query("DELETE FROM reservations WHERE id = $id");
 	if(!$result) {
 		goToWithError('impossible to delete, consistency may be lost');

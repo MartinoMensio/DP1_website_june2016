@@ -2,13 +2,15 @@
   require 'functions.php';
     // this page requires authentication
   checkAuthentication(true);
+  
+  // Connect to database.
+  $conn = connectToDb();
+
   if(!isset($_REQUEST["type"])) {
     goToWithError('Invalid request');
   }
-  // Connect to database.
-  $conn = connectToDb();
   if($_REQUEST["type"] === "remove") {
-    //echo 'you want to remove id ='.$_REQUEST["id"];
+    // check and validate id
     $id = $_REQUEST["id"];
     if(filter_var($id, FILTER_VALIDATE_INT) === FALSE) {
       goToWithError('Invalid ID specified');
@@ -28,7 +30,6 @@
 </head>
 <body>
 <div class="w3-container w3-indigo w3-center topbar">
-<!-- the title must be dynamic -->
 	<h1>Machine Reservations - New reservation</h1>
 </div>
 <div class="placeholder">i am not visible</div>
