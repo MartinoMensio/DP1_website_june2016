@@ -36,6 +36,7 @@ $maxInactiveTime = 60 * 2;
 $numberOfMachines = 4;
 
 $loginPage = "login.php";
+$homePage = "index.php";
 
 // this array stores a couple of pages: success and error
 $redirections = array(
@@ -52,6 +53,17 @@ $redirections = array(
 		'error' => 'list_user_reservations.php'
 	)
 );
+
+// redirect navigation from function pages to homepage
+switch (basename($_SERVER["SCRIPT_FILENAME"])) {
+	case 'config.php':
+	case 'functions.php':
+		header("Location: $homePage");
+		break;
+	default:
+		// nothing
+		break;
+}
 
 // check which db to use
 $database = "azure";
@@ -72,3 +84,5 @@ if ($database === "local") {
 	$pwd = "angstshs";
 	$db = "s232297";
 }
+
+?>
