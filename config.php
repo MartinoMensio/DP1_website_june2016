@@ -73,7 +73,7 @@ switch (basename($_SERVER['SCRIPT_FILENAME'])) {
 }
 
 // check which db to use
-$database = 'azure';
+$database = 'cclix';
 if ($database === 'local') {
   $host = 'localhost';
   $user = 'root';
@@ -81,15 +81,16 @@ if ($database === 'local') {
   $db = 'machines_reservation';
 } else if($database === 'azure') {
   require '../db_credentials.php';
-  $host = $azure_host;
-  $user = $azure_user;
-  $pwd = $azure_pwd;
-  $db = $azure_db;
+  $host = $azure_host; unset($azure_host);
+  $user = $azure_user; unset($azure_user);
+  $pwd = $azure_pwd; unset($azure_pwd);
+  $db = $azure_db; unset($azure_db);
 } else {
-  $host = 'localhost';
-  $user = 's232297';
-  $pwd = 'angstshs';
-  $db = 's232297';
+  require 'cclix_db_credentials.php';
+  $host = $cclix_host; unset($cclix_host);
+  $user = $cclix_user; unset($cclix_user);
+  $pwd = $cclix_pwd; unset($cclix_pwd);
+  $db = $cclix_db; unset($cclix_db);
 }
 
 ?>
