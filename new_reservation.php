@@ -48,9 +48,9 @@
               <input type="number" min="1" max="1439" required="required" name="duration" placeholder="duration in minutes" class="w3-input w3-hover-light-grey" />
               <label class="w3-label w3-validate">Duration (minutes)</label>
             </p>
-              <!-- input type="time" is not supported by firefox and IE (supported by Microsoft Edge, Chrome), so i leave a placeholder for the format -->
+              <!-- input type="time" is not supported by firefox and IE (supported by Microsoft Edge, Chrome), so i leave a placeholder for the format and a regexp -->
             <p>
-              <input type="time" required="required" name="start_time" placeholder="hh:mm" pattern="[0-9]{1,2}:[0-9]{1,2}" title="hh:mm" class="w3-input w3-hover-light-grey" />
+              <input type="time" required="required" name="start_time" placeholder="hh:mm" pattern="([0-9]|[0-1][0-9]|2[0-3]):([0-9]|[0-5][0-9])" title="valid hh:mm pair" class="w3-input w3-hover-light-grey" />
               <label class="w3-label w3-validate">Start time</label>
             </p>
             <p>
