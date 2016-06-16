@@ -16,8 +16,13 @@ function checkAuthentication($redirect) {
     session_unset();
     session_destroy();
     if($redirect) {
+      if(!isset($_SESSION['timeout'])) {
+        $message = 'In order to view this page you must be authenticated';
+      } else {
+        $message = 'Your session expired. Please log in again';
+      }
       // go to login
-      header('Location: ' . $loginPage);
+      goToPage("$loginPage?error=$message");
       die();
     }
   } else {
