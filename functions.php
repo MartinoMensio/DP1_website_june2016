@@ -13,14 +13,15 @@ function checkAuthentication($redirect) {
   // check the value of the timeout
   if(!isset($_SESSION['timeout']) || $_SESSION['timeout'] + $maxInactiveTime < time()) {
     // expired or new session
+    if(!isset($_SESSION['timeout'])) {
+      $message = 'In order to view this page you must be authenticated';
+    } else {
+      $message = 'Your session expired. Please log in again';
+    }
+    
     session_unset();
     session_destroy();
     if($redirect) {
-      if(!isset($_SESSION['timeout'])) {
-        $message = 'In order to view this page you must be authenticated';
-      } else {
-        $message = 'Your session expired. Please log in again';
-      }
       // go to login
       goToPage("$loginPage?error=$message");
       die();
