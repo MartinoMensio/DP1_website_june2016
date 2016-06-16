@@ -30,7 +30,10 @@ function checkAuthentication($redirect) {
 // generic function to connect to database disabling autocommit
 function connectToDb() {
   global $host, $user, $pwd, $db;
-  $conn = new mysqli($host, $user, $pwd, $db);
+  $conn = @new mysqli($host, $user, $pwd, $db);
+  if($conn->connect_error) {
+    die('<div style="color:#fff;background-color:#f44336"><h1>Connection with database failed</h1><h3>Please contact the system administrator</h3></div>');
+  }
   if(!$conn) {
     die('impossible to connect to database');
   }
