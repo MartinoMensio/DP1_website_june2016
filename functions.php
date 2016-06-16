@@ -97,18 +97,18 @@ function listUserReservations($conn) {
 // print the sidenav that contains some useful links
 function sidenavPrint() {
   global $authenticated, $loginPage;
-  echo '<a href="index.php">Homepage (all reservations)</a>';
+  echo '<a href="index.php">All reservations</a>';
   // look if user is logged in (checked by the checkAuthentication function)
   if($authenticated) {
     // authenticated user
     echo '<h1 class="w3-padding-medium">Hello '.$_SESSION['name'].'</h1>';
-    echo '<a href="profile.php">profile</a>';
-    echo '<a href="new_reservation.php">add reservation</a>';
-    echo '<a href="list_user_reservations.php">list my reservations</a>';
+    echo '<a href="profile.php">Profile</a>';
+    echo '<a href="new_reservation.php">New reservation</a>';
+    echo '<a href="list_user_reservations.php">My reservations</a>';
     echo '<a href="logout.php">logout</a>';
   } else {
     // not autenthicated user
-    echo "<a href=\"$loginPage\">login or register</a>";
+    echo "<a href=\"$loginPage\">Login or register</a>";
   }
 }
 

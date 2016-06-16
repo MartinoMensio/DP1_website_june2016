@@ -18,7 +18,7 @@
 
 <body>
   <div class="w3-container w3-indigo w3-center topbar">
-    <h1>Machine Reservations - New reservation</h1>
+    <h1>New reservation</h1>
   </div>
   <div class="placeholder">i am not visible</div>
   <div class="w3-sidenav w3-light-blue w3-card-8 w3-animate-left" style="width:25%">
@@ -54,7 +54,7 @@
               <label class="w3-label w3-validate">Start time</label>
             </p>
             <p>
-              <input class="w3-btn w3-indigo" type="submit" value="create reservation" />
+              <input class="w3-btn w3-indigo" type="submit" value="Create reservation" />
             </p>
           </form>
         </div>
