@@ -45,7 +45,7 @@
           <h1>Login</h1>
           <form action="login_validate.php" method="post">
             <input type="text" value="login" hidden="hidden" name="type" />
-            <table>
+            <table class="w3-table w3-hoverable">
               <tr>
                 <td>Username (email):</td>
                 <td><input type="email" maxlength="50" required="required" name="email" placeholder="your email" /></td>
@@ -62,7 +62,7 @@
           <h1>Register</h1>
           <form action="login_validate.php" method="post">
             <input type="text" value="register" hidden="hidden" name="type" />
-            <table>
+            <table class="w3-table w3-hoverable">
               <tr>
                 <td>Name:</td>
                 <td><input type="text" maxlength="50" required="required" name="name" placeholder="your name" /></td>

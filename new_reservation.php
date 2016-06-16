@@ -42,7 +42,7 @@
     ?>
       <form action="reservation_submit.php" method="post">
         <input type="text" value="add" hidden="hidden" name="type" />
-        <table>
+        <table class="w3-table w3-hoverable">
           <tr>
             <td>Duration (minutes):</td>
             <td><input type="number" min="1" max="1439" required="required" name="duration" placeholder="duration in minutes" /></td>

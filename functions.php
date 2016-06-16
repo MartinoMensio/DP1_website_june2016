@@ -61,7 +61,7 @@ function listAllReservations($conn) {
   if($result->num_rows == 0) {
     echo '<h3>There are no reservations stored</h3>';
   } else {
-    echo '<table class="w3-table w3-bordered w3-striped w3-centered">';
+    echo '<table class="w3-table w3-bordered w3-striped w3-centered w3-hoverable">';
     echo '<tr class="w3-blue"><th>Starting time</th><th>Ending time</th><th>Duration (minutes)</th><th>Selected machine</th></tr>';
     while($row = $result->fetch_object()) {
       // compute the duration
@@ -83,7 +83,7 @@ function listUserReservations($conn) {
   if($result->num_rows == 0) {
     echo '<h3>You have no reservations</h3>';
   } else {
-    echo '<table class="w3-table w3-bordered w3-striped w3-centered">';
+    echo '<table class="w3-table w3-bordered w3-striped w3-centered w3-hoverable">';
     echo '<tr class="w3-blue"><th>Starting time</th><th>Ending time</th><th>Duration (minutes)</th><th>Selected machine</th><th></th></tr>';
     while($row = $result->fetch_object()) {
       $duration = $row->ending_hour*60 + $row->ending_minute -$row->starting_hour*60 - $row->starting_minute;

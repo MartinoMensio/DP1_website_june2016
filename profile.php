@@ -26,7 +26,7 @@
   </div>
   <div class="w3-animate-right w3-padding-medium" style="margin-left:25%">
     <h1 class="w3-red"><noscript>warning: Javascript is disabled, some functions may not work</noscript></h1>
-    <table class="w3-table w3-bordered w3-striped">
+    <table class="w3-table w3-bordered w3-striped w3-hoverable">
       <?php
         echo '<tr><td>name:</td><td>'.$_SESSION['name'].'</td></tr>';
         echo '<tr><td>surname:</td><td>'.$_SESSION['surname'].'</td></tr>';
