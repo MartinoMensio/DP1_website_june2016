@@ -20,7 +20,7 @@
     // $start_time is a string in the form '12:05'
     $pieces = explode(':', $start_time);
     if (count($pieces) != 2) {
-      goToWithError('Invalid format for starting hour');
+      goToWithError('Invalid format for starting time');
     }
     $starting_minute = $pieces[1];
     $starting_hour = $pieces[0];
