@@ -24,7 +24,7 @@
   <div class="w3-sidenav w3-light-blue w3-card-8 w3-animate-left" style="width:25%">
     <?php sidenavPrint(); ?>
   </div>
-  <div class="w3-animate-right w3-padding-medium" style="margin-left:25%">
+  <div class="w3-padding-medium" style="margin-left:25%">
     <h1 class="w3-red"><noscript>warning: Javascript is disabled, some functions may not work</noscript></h1>
     <?php
       if(isset($_REQUEST['error'])) {
@@ -40,21 +40,25 @@
         echo '<div id="new_form" class="visible">';
       }
     ?>
-      <form action="reservation_submit.php" method="post">
-        <input type="text" value="add" hidden="hidden" name="type" />
-        <table class="w3-table w3-hoverable">
-          <tr>
-            <td>Duration (minutes):</td>
-            <td><input type="number" min="1" max="1439" required="required" name="duration" placeholder="duration in minutes" /></td>
-          </tr>
-          <!-- input type="time" is not supported by firefox and IE (supported by Microsoft Edge, Chrome), so i leave a placeholder for the format -->
-          <tr>
-            <td>Start time:</td>
-            <td><input type="time" required="required" name="start_time" placeholder="hh:mm" pattern="[0-9]{1,2}:[0-9]{1,2}" title="hh:mm" /></td>
-          </tr>
-        </table>
-        <input class="w3-btn w3-indigo" type="submit" value="create reservation" />
-      </form>
+      <div class="w3-animate-right w3-padding-small w3-full">
+        <div class="w3-card-8">
+          <form action="reservation_submit.php" method="post" class="w3-padding-medium">
+            <input type="text" value="add" hidden="hidden" name="type" />
+            <p>
+              <input type="number" min="1" max="1439" required="required" name="duration" placeholder="duration in minutes" class="w3-input w3-hover-light-grey" />
+              <label class="w3-label w3-validate">Duration (minutes)</label>
+            </p>
+              <!-- input type="time" is not supported by firefox and IE (supported by Microsoft Edge, Chrome), so i leave a placeholder for the format -->
+            <p>
+              <input type="time" required="required" name="start_time" placeholder="hh:mm" pattern="[0-9]{1,2}:[0-9]{1,2}" title="hh:mm" class="w3-input w3-hover-light-grey" />
+              <label class="w3-label w3-validate">Start time</label>
+            </p>
+            <p>
+              <input class="w3-btn w3-indigo" type="submit" value="create reservation" />
+            </p>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
   <script type="text/javascript">
