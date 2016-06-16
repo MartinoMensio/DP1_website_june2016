@@ -73,7 +73,7 @@ switch (basename($_SERVER['SCRIPT_FILENAME'])) {
 }
 
 // check which db to use
-$database = 'cclix';
+$database = 'azure';
 if ($database === 'local') {
   $host = 'localhost';
   $user = 'root';
