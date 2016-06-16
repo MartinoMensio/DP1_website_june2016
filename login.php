@@ -1,7 +1,11 @@
 <?php
   require 'functions.php';
-  // this page requires authentication
+  // this page does not require authentication
   checkAuthentication(false);
+  // if user already logged in, redirect to homepage
+  if($authenticated) {
+    goToPage($homePage);
+  }
 ?>
 <!DOCTYPE html>
 <html>

@@ -1,5 +1,7 @@
 <?php
   session_start();
+  // remove all session variables because new login is asked
+  session_unset();
   require 'functions.php';
   if(!isset($_POST['type'])) {
     goToWithError('Incorrect request');

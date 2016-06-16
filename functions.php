@@ -152,6 +152,12 @@ function goToDestination() {
   die();
 }
 
+// go to a custom destination page
+function goToPage($destination) {
+  header("Location: $destination");
+  die();
+}
+
 // login function
 // email and password are already sanitized and checked by caller
 function login($conn, $email, $password) {
