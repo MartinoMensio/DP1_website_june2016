@@ -13,6 +13,7 @@
   <title>Machine reservation - My reservations</title>
   <link rel="stylesheet" type="text/css" href="lib/w3.css" />
   <link rel="stylesheet" type="text/css" href="mystyle.css" />
+  <script src="lib/jquery-1.12.4.min.js"></script>
 </head>
 
 <body>
@@ -48,8 +49,8 @@
     }
 
     function hideError() {
-      document.getElementById('error').className = 'hidden';
-      document.getElementById('list_reservations').className = 'visible';
+      $('#error').addClass('hidden');
+      $('#list_reservations').removeClass('hidden');
     }
   </script>
 </body>

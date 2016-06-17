@@ -11,9 +11,10 @@
 <html>
 
 <head>
-  <title>Machine reservation - Login</title>
+  <title>Machine reservations - Login</title>
   <link rel="stylesheet" type="text/css" href="lib/w3.css" />
   <link rel="stylesheet" type="text/css" href="mystyle.css" />
+  <script src="lib/jquery-1.12.4.min.js"></script>
 </head>
 
 <body>
@@ -92,8 +93,8 @@
   </div>
   <script type="text/javascript">
     function hideError() {
-      document.getElementById('error').className = 'hidden';
-      document.getElementById('login_form').className = 'visible';
+      $('#error').addClass('hidden');
+      $('#login_form').removeClass('hidden');
     }
   </script>
 </body>
