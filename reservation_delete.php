@@ -11,7 +11,7 @@
   }
   if($_REQUEST['type'] === 'remove') {
     // check and validate id
-    $id = $_REQUEST['id'];
+    $id = $conn->real_escape_string($_REQUEST['id']);
     if(filter_var($id, FILTER_VALIDATE_INT) === FALSE) {
       goToWithError('Invalid ID specified');
     }
