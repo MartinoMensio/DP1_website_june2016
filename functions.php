@@ -87,7 +87,8 @@ function listUserReservations($conn) {
     echo '<tr class="w3-blue"><th>Starting time</th><th>Ending time</th><th>Duration (minutes)</th><th>Selected machine</th><th></th></tr>';
     while($row = $result->fetch_object()) {
       $duration = $row->ending_hour*60 + $row->ending_minute -$row->starting_hour*60 - $row->starting_minute;
-      echo '<tr><td>'.sprintf("%02d:%02d",$row->starting_hour, $row->starting_minute).'</td><td>'.sprintf("%02d:%02d",$row->ending_hour, $row->ending_minute).'</td><td>'.$duration.'</td><td>'.$row->machine.'</td><td><button class="w3-btn w3-indigo" type="button" onclick="remove_reservation('.$row->id.')">Remove</button></td></tr>';
+      // the remove can be done by using a link, so that also if client disabled javascript it works
+      echo '<tr><td>'.sprintf("%02d:%02d",$row->starting_hour, $row->starting_minute).'</td><td>'.sprintf("%02d:%02d",$row->ending_hour, $row->ending_minute).'</td><td>'.$duration.'</td><td>'.$row->machine.'</td><td><a class="w3-btn w3-indigo" type="button" href="reservation_delete.php?type=remove&id='.$row->id.'">Remove</a></td></tr>';
     }
     $result->close();
     echo '</table>';

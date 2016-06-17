@@ -44,10 +44,6 @@
     </div>
   </div>
   <script type="text/javascript">
-    function remove_reservation(id) {
-      location = "reservation_delete.php?type=remove&id=" + id;
-    }
-
     function hideError() {
       $('#error').addClass('hidden');
       $('#list_reservations').removeClass('hidden');
